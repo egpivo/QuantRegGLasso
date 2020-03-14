@@ -91,7 +91,7 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
     }
   }
   
-  bs0 <- bs(crep, knots = ikn,Boundary.knots = bkn, degree = degree, intercept = T)
+  bs0 <- bs(crep, knots = ikn,Boundary.knots = bkn, degree = degree, intercept = TRUE)
   LL <- dim(bs0)[2]
   bs1 <- matrix(0, nrow = nrep, ncol = LL)
   a0 <- diag(LL)
