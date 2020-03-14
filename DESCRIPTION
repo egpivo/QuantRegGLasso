@@ -1,0 +1,15 @@
+Package: qrpQuanReg
+Type: Package
+Title: Adaptively weighted group lasso for semiparametic quantile regression models
+Version: 0.0.0.1
+Author@R: c(
+  person("Wen-Ting", "Wang", email="egpivo@gmail.com", rol = c("aut", "cre")),
+  person("Wei-Ying ", "Wu", email="wuweiying1011@gmail.com", rol = c("aut", "ctb")),
+  person("Toshio", "Honda", email="t.honda@r.hit-u.ac.jp", rol = c("aut")),
+  person("Ching-Kang", "Ing", email="cking@stat.nthu.edu.tw", rol = c("aut")))
+Description: Adaptively weighted group lasso for semiparametic quantile regression models
+License: GLP-3
+Imports: Rcpp (>= 0.12.5)
+LinkingTo: Rcpp, RcppArmadillo
+Encoding: UTF-8
+RoxygenNote: 7.0.2
