@@ -100,16 +100,16 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
   bs1[, 1] <- sqLL
   bs1[, 2] <- sqrt(12) * sqLL * (crep - 0.5)
   
-  for (ii in 3:LL)
+  for(ii in 3:LL)
     bs1[, ii] <- bs0[, (ii - 1)]
-
-  for (jj in 3:LL){
+  
+  for(jj in 3:LL) {
     ee <- as.numeric(bs1[, jj])
-    
-    for (ii in 1:(jj - 1))
+
+    for(ii in 1:(jj - 1))
       a0[jj, ii] <- -LL*(mean(ee * bs1[, ii]))
-    
-    for (ii in 1:(jj - 1))
+
+    for(ii in 1:(jj - 1))
       ee <- ee + a0[jj, ii] * as.numeric(bs1[, ii])
     
     nee <- sqrt(mean(ee ** 2))
@@ -125,7 +125,6 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
     b_function <- bs1[unlist(idx), ]
     z <- crep_input
   }
-
+  
   return(list(b_function = b_function, z = z))
 }
-
