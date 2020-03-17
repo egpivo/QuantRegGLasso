@@ -6,9 +6,9 @@
 
 using namespace Rcpp;
 
-// qr_rcpp_omega
-Rcpp::List qr_rcpp_omega(const arma::mat Y, const arma::mat W, const arma::mat omega, const arma::vec lambda, const double tau, const int qn, double zeta, double zetaincre, int maxit, double tol);
-RcppExport SEXP _qrpQuanReg_qr_rcpp_omega(SEXP YSEXP, SEXP WSEXP, SEXP omegaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
+// awgl_omega
+Rcpp::List awgl_omega(const arma::mat Y, const arma::mat W, const arma::mat omega, const arma::vec lambda, const double tau, const int qn, double zeta, double zetaincre, int maxit, double tol);
+RcppExport SEXP _qrpQuanReg_awgl_omega(SEXP YSEXP, SEXP WSEXP, SEXP omegaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,13 +22,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type zetaincre(zetaincreSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(qr_rcpp_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol));
+    rcpp_result_gen = Rcpp::wrap(awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol));
     return rcpp_result_gen;
 END_RCPP
 }
-// qr_rcpp
-Rcpp::List qr_rcpp(const arma::mat Y, const arma::mat W, const arma::vec lambda, const double tau, const int L, const int qn, double zeta, double zetaincre, int maxit, double tol);
-RcppExport SEXP _qrpQuanReg_qr_rcpp(SEXP YSEXP, SEXP WSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP LSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
+// awgl
+Rcpp::List awgl(const arma::mat Y, const arma::mat W, const arma::vec lambda, const double tau, const int L, const int qn, double zeta, double zetaincre, int maxit, double tol);
+RcppExport SEXP _qrpQuanReg_awgl(SEXP YSEXP, SEXP WSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP LSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,14 +42,14 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type zetaincre(zetaincreSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
-    rcpp_result_gen = Rcpp::wrap(qr_rcpp(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol));
+    rcpp_result_gen = Rcpp::wrap(awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_qrpQuanReg_qr_rcpp_omega", (DL_FUNC) &_qrpQuanReg_qr_rcpp_omega, 10},
-    {"_qrpQuanReg_qr_rcpp", (DL_FUNC) &_qrpQuanReg_qr_rcpp, 10},
+    {"_qrpQuanReg_awgl_omega", (DL_FUNC) &_qrpQuanReg_awgl_omega, 10},
+    {"_qrpQuanReg_awgl", (DL_FUNC) &_qrpQuanReg_awgl, 10},
     {NULL, NULL, 0}
 };
 

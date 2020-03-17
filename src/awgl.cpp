@@ -25,13 +25,16 @@ arma::vec soft1(const arma::colvec v, const double tau) {
   return(ans);
 }
 
-arma::vec soft3(const arma::colvec v, const arma::mat omega, const double lambda, const int L) {
+arma::vec soft3(const arma::colvec v,
+                const arma::mat omega,
+                const double lambda,
+                const int L) {
   int m, pL = v.n_elem;
   arma::vec ans, zero;
   double temp;
-  ans.zeros(pL);
   int p = (int) pL / L;
   
+  ans.zeros(pL);
   if(L > 1)
     zero.zeros(L - 1);
   
@@ -56,7 +59,9 @@ arma::vec soft3(const arma::colvec v, const arma::mat omega, const double lambda
   return(ans);
 }
 
-arma::vec scad_derivative(const arma::colvec v,  const double lambda, const double a){
+arma::vec scad_derivative(const arma::colvec v, 
+                          const double lambda,
+                          const double a){
   int pL = v.n_elem;
   arma::vec absv = abs(v);
   arma::vec ans;
@@ -92,7 +97,11 @@ arma::mat omega_weight(const arma::colvec v, const int p, const int L) {
   return(ans);
 }
 
-arma::mat BIC(const arma::mat xi, const arma::colvec gamma, const double tau, const int L, const int qn) {
+arma::mat BIC(const arma::mat xi,
+              const arma::colvec gamma,
+              const double tau,
+              const int L,
+              const int qn) {
   int n = xi.n_rows, pL = gamma.n_elem, m;
   int Sc = 0, Sv = 0;
   double loss = 0;
@@ -123,15 +132,29 @@ arma::mat BIC(const arma::mat xi, const arma::colvec gamma, const double tau, co
   return(ans);
 }
 
-void qrcore(const arma::mat Y, const arma::mat W, const arma::mat Wt, const arma::mat Winv, const arma::mat Winvt, const arma::mat omega, arma::mat &gamma, arma::mat &xi, arma::mat &phi, arma::mat &theta1, arma::mat &theta2, const double lambda, const double tau, double zeta, const double zetaincre, const int maxit, const double tol) {
+void qrcore(const arma::mat Y,
+            const arma::mat W,
+            const arma::mat Wt,
+            const arma::mat Winv,
+            const arma::mat Winvt,
+            const arma::mat omega,
+            arma::mat &gamma,
+            arma::mat &xi,
+            arma::mat &phi,
+            arma::mat &theta1,
+            arma::mat &theta2,
+            const double lambda,
+            const double tau,
+            double zeta,
+            const double zetaincre,
+            const int maxit,
+            const double tol) {
   int n = Y.n_rows;
   int p = omega.n_rows;
   int pL = W.n_cols;
   int L = (int) pL / p;
   int iter = 0;
-  arma::mat zero;
   arma::vec er(3);
-  zero.zeros(pL, 1);
   
   arma::mat gammaold = gamma;
   arma::mat xiold = xi;
@@ -168,13 +191,22 @@ void qrcore(const arma::mat Y, const arma::mat W, const arma::mat Wt, const arma
     Rcpp::Rcout << "Not converge at lambda=" << lambda << "\n" << std::endl;
 }
 
-void qrinit(const arma::mat Y, const arma::mat W, arma::mat &Wt, arma::mat &gamma, arma::mat &xi, arma::mat &theta1, const double tau, double zeta, double zetaincre, int maxit, double tol){
+void qrinit(const arma::mat Y,
+            const arma::mat W,
+            arma::mat &Wt,
+            arma::mat &gamma,
+            arma::mat &xi,
+            arma::mat &theta1,
+            const double tau,
+            double zeta,
+            double zetaincre,
+            int maxit,
+            double tol){
   int n = Y.n_rows;
   int pL = W.n_cols;
   int iter = 0;
-  arma::mat Winv_initial, IpL, zero, gammaold, xiold;
+  arma::mat Winv_initial, IpL, gammaold, xiold;
   arma::vec er(2);
-  zero.zeros(pL, 1);
   Wt = arma::trans(W);
   IpL.eye(pL, pL);
   if(pL < n)
@@ -211,7 +243,35 @@ void qrinit(const arma::mat Y, const arma::mat W, arma::mat &Wt, arma::mat &gamm
 }
 
 // [[Rcpp::export]]
-Rcpp::List qr_rcpp_omega(const arma::mat Y, const arma::mat W, const arma::mat omega, const arma::vec lambda, const double tau, const int qn, double zeta, double zetaincre, int maxit, double tol){
+Rcpp::List awgl_omega(const arma::mat Y,
+                      const arma::mat W,
+                      const arma::mat omega,
+                      const arma::vec lambda,
+                      const double tau,
+                      const int qn,
+                      double zeta,
+                      double zetaincre,
+                      int maxit,
+                      double tol) {
+  /* Quantile regression with adatively group lasso with the input omega
+   * Parameters
+   *    - Y: data matrix (n x 1)
+   *    - W: B-splines with covariates matrix (n x pL)
+   *    - omega: weights for group lasso
+   *    - lambda: a sequence of tuning parameters 
+   *    - tau: quantile of interest
+   *    - L: number of groups
+   *    - qn: bound parameter for HDIC
+   *    - zeta: step parameter
+   *    - zetaincre: increment of each step
+   *    - maxit: maximum number of iterations
+   *    - tol: tolerance rate 
+   * Returns
+   *    - gamma: target estimate
+   *    - xi, phi: auxiliary estimate in the ADMM algorithm
+   *    - theta1, theta2: Lagrangian multipliers
+   *    - BIC: BIC values of different lambdas
+   */
   int pL = W.n_cols;
   int n_lambda = lambda.n_elem;
   int n = Y.n_rows;
@@ -223,7 +283,7 @@ Rcpp::List qr_rcpp_omega(const arma::mat Y, const arma::mat W, const arma::mat o
   arma::mat phi;
   arma::mat theta1;
   arma::mat theta2;
-  arma::mat Winv, zero, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
+  arma::mat Winv, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
   gamma.zeros(pL, n_lambda);
   xi.zeros(n, n_lambda);
   phi.zeros(pL, n_lambda);
@@ -288,14 +348,44 @@ Rcpp::List qr_rcpp_omega(const arma::mat Y, const arma::mat W, const arma::mat o
 }
 
 // [[Rcpp::export]]
-Rcpp::List qr_rcpp(const arma::mat Y, const arma::mat W, const arma::vec lambda, const double tau, const int L, const int qn, double zeta, double zetaincre, int maxit, double tol){
+Rcpp::List awgl(const arma::mat Y,
+                const arma::mat W,
+                const arma::vec lambda,
+                const double tau,
+                const int L,
+                const int qn,
+                double zeta,
+                double zetaincre,
+                int maxit,
+                double tol) {
+  /* Quantile regression with adatively group lasso without input Omega
+   * Parameters
+   *    - Y: data matrix (n x 1)
+   *    - W: B-splines with covariates matrix (n x pL)
+   *    - lambda: a sequence of tuning parameters 
+   *    - tau: quantile of interest
+   *    - L: number of groups
+   *    - qn: bound parameter for HDIC
+   *    - zeta: step parameter
+   *    - zetaincre: increment of each step
+   *    - maxit: maximum number of iterations
+   *    - tol: tolerance rate 
+   * Returns
+   *    - gamma: target estimate
+   *    - xi, phi: auxiliary estimate in the ADMM algorithm
+   *    - theta1, theta2: Lagrangian multipliers
+   *    - BIC: BIC values of different lambdas
+   *    - omega: estimate weights for group lasso
+   */
+  
   int pL = W.n_cols;
   int n_lambda = lambda.n_elem;
   int n = Y.n_rows;
   int p = (int) pL / L;
+  float scad_weight = 3.7;
   
   arma::mat gamma, xi, phi, theta1, theta2, gammaold, xiold, phiold, theta1old, theta2old;
-  arma::mat Winv, zero, Wt, Winvt, omega_fake, IpL, BIC_lambda, omega;
+  arma::mat Winv, Wt, Winvt, omega_fake, IpL, BIC_lambda, omega;
   gamma.zeros(pL, n_lambda);
   xi.zeros(n, n_lambda);
   phi.zeros(pL, n_lambda);
@@ -353,7 +443,7 @@ Rcpp::List qr_rcpp(const arma::mat Y, const arma::mat W, const arma::vec lambda,
     uword index1;
     // If .col(1), refer to BIC with log term
     (BIC_lambda.col(0)).min(index1);
-    arma::mat weight_scad_deriv = scad_derivative(abs(gamma.col(index1)), lambda[index1], 3.7);
+    arma::mat weight_scad_deriv = scad_derivative(abs(gamma.col(index1)), lambda[index1], scad_weight);
     omega = omega_weight(weight_scad_deriv, p, L);
     
     /* main procedure */

@@ -35,9 +35,9 @@ grp_qr <- function(Y, W, L, omega = NULL, tau, qn = 1, lambda = NULL, maxit = 10
   zetaincre <- 1
   
   if(is.null(omega))
-    result <- qr_rcpp(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, thr)
+    result <- awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, thr)
   else
-    result <- qr_rcpp_omega(Y, W, omega, lambda, tau, qn,zeta, zetaincre, maxit, thr)
+    result <- awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, thr)
   
   result$phi[, 1] <- result$gamma[, 1]
   
@@ -75,7 +75,7 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
     } else if(length(crep_input) < 1e6) {
       nrep <- 1e6
       crep <- sort(c(crep_input,
-                     runif(1e6 - length(crep_input), min = 0, max = 1)))
+                     runif(1e6 - length(crep_input),min = 0, max = 1)))
     } else {
       nrep <- length(crep_input)
       crep <- crep_input
@@ -83,8 +83,7 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
   } else{
     if(is.null(crep_input)){
       nrep <- 1e4
-      crep <- 1:nrep
-      crep <- crep/nrep
+      crep <- (1:nrep) / nrep
     } else{
       nrep <- length(crep_input)
       crep <- crep_input
@@ -113,8 +112,8 @@ B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
       ee <- ee + a0[jj, ii] * as.numeric(bs1[, ii])
     
     nee <- sqrt(mean(ee ** 2))
-    bs1[,jj] <- ee / nee * sqLL
-    a0[jj,] <- a0[jj, ] * sqLL / nee
+    bs1[, jj] <- ee / nee * sqLL
+    a0[jj, ] <- a0[jj, ] * sqLL / nee
   }
   
   if(is.null(crep_input) || is_approx == FALSE) {
