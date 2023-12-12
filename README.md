@@ -10,7 +10,7 @@
    ```r
    remotes::install_github("egpivo/grpQuanReg")
    ```
-  ```
+
 **Please Note:**
 - **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
 
@@ -24,7 +24,7 @@
 
 ### Author
 - [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b)
-- [Wei-Ying_Wu]([https://www.linkedin.com/in/wen-ting-wang-6083a17b](https://projecteuclid.org/search?author=Wei-Ying_Wu)
+- [Wei-Ying_Wu](https://projecteuclid.org/search?author=Wei-Ying_Wu)
 
  
 ### Maintainer
