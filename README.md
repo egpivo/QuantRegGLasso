@@ -10,6 +10,17 @@
    ```r
    remotes::install_github("egpivo/grpQuanReg")
    ```
+  ```
+**Please Note:**
+- **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
+
+- **Mac Users:** You need Xcode Command Line Tools and should install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases). Follow these steps in the terminal:
+    ```bash
+    brew update
+    brew install gcc
+    ```
+    For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
+
 
 ### Author
 - [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b)
