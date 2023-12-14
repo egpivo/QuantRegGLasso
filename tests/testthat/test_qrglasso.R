@@ -18,5 +18,5 @@ test_that("qrglasso returns expected results", {
   
   # Perform assertions
   expect_s3_class(result, "qrglasso")
-  expect_true(all(names(result) %in% c("gamma", "xi", "phi", "BIC", "lambda", "omega")))
+  expect_true(all(names(result) %in% c("gamma", "xi", "phi", "BIC", "lambda", "L", "omega")))
 })
