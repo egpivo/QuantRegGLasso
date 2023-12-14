@@ -1,14 +1,14 @@
-## QuantRegGroups Package
-[![R build status](https://github.com/egpivo/QuantRegGroups/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGroups/actions)
-[![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/QuantRegGroups/master.svg)](https://app.codecov.io/github/egpivo/QuantRegGroups?branch=master)
+## QuantRegGLasso Package
+[![R build status](https://github.com/egpivo/QuantRegGLasso/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGroups/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/QuantRegGLasso/master.svg)](https://app.codecov.io/github/egpivo/QuantRegGLasso?branch=master)
 
 ## Description
-**QuantRegGroups** is an R package meticulously crafted to address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates.
+**QuantRegGLasso** is an R package meticulously crafted to address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates.
 
 ## Installation
 - **Install the current development version from GitHub**:
    ```r
-   remotes::install_github("egpivo/QuantRegGroups")
+   remotes::install_github("egpivo/QuantRegGLasso")
    ```
 
 **Please Note:**
