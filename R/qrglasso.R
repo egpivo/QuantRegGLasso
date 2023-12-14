@@ -9,7 +9,7 @@
 #' @param lambda A sequence of tuning parameters. Default value is NULL.
 #' @param maxit The maximum number of iterations. Default value is 1000.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
-#' @return This function returns a \code{list} including: 
+#' @return This function returns a \code{list} including:
 #' \itemize{
 #'  \item{gamma}{A target estimate}
 #'  \item{xi}{An auxiliary estimate in the ADMM algorithm}
@@ -28,13 +28,13 @@
 #' pL <- 10
 #' Y <- matrix(rnorm(n), n, 1)
 #' W <- matrix(rnorm(n * pL), n, pL)
-#' 
+#'
 #' # Call qrglasso with default parameters
 #' result_default <- qrglasso(Y = Y, W = W, L = 2)
-#' 
+#'
 #' # Print the result
 #' print(result_default)
-#' 
+#'
 #' # Example 2: Custom usage with specified parameters
 #' # Generate synthetic data
 #' set.seed(456)
@@ -57,32 +57,49 @@
 #' )
 #' print(result_custom)
 #'
-qrglasso <- function(Y, W, L, omega = NULL, tau = 0.5, qn = 1, lambda = NULL, maxit = 1000, thr = 1e-04){
-  if(is.null(lambda)) {
-    nlambda <- 51
-    max.lambda <- 10
-    lambda <- c(0, exp(seq(log(max.lambda / 1e4), log(max.lambda), length = (nlambda - 1))))
-  } else {
-    nlambda <- length(lambda)
+qrglasso <-
+  function(Y,
+           W,
+           L,
+           omega = NULL,
+           tau = 0.5,
+           qn = 1,
+           lambda = NULL,
+           maxit = 1000,
+           thr = 1e-04) {
+    if (is.null(lambda)) {
+      nlambda <- 51
+      max.lambda <- 10
+      lambda <-
+        c(0, exp(seq(
+          log(max.lambda / 1e4), log(max.lambda), length = (nlambda - 1)
+        )))
+    } else {
+      nlambda <- length(lambda)
+    }
+    
+    zeta <- 10
+    zetaincre <- 1
+    
+    if (is.null(omega))
+      result <-
+      awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, thr)
+    else
+      result <-
+      awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, thr)
+    
+    result$phi[, 1] <- result$gamma[, 1]
+    
+    obj.cv <- list(
+      gamma = result$gamma,
+      xi = result$xi,
+      phi = result$phi,
+      BIC = result$BIC,
+      lambda = lambda,
+      L = L,
+      omega = result$omega
+    )
+    
+    class(obj.cv) <- "qrglasso"
+    return(obj.cv)
   }
-  
-  zeta <- 10
-  zetaincre <- 1
-  
-  if(is.null(omega))
-    result <- awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, thr)
-  else
-    result <- awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, thr)
-  
-  result$phi[, 1] <- result$gamma[, 1]
-  
-  obj.cv <- list(gamma = result$gamma,
-                 xi = result$xi,
-                 phi = result$phi,
-                 BIC = result$BIC,
-                 lambda = lambda,
-                 omega = result$omega)
-  
-  class(obj.cv) <- "qrglasso"
-  return(obj.cv)
-}
