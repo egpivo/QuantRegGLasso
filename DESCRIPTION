@@ -19,16 +19,16 @@ Description: Address adaptively weighted group Lasso procedures of quantile regr
 License: GPL-3
 LazyData: true
 ByteCompile: true
-BugReports: https://github.com/egpivo/SpatPCA/issues
+BugReports: https://github.com/egpivo/QuantRegGLasso/issues
 Depends: 
     R (>= 3.4.0)
 Imports:
-  Rcpp (>= 1.0.10),
-  RcppParallel (>= 5.1.7)
-LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+  Rcpp (>= 1.0.10)
+LinkingTo: Rcpp, RcppArmadillo
 Suggests:
     knitr,
     rmarkdown,
+    testthat (>= 2.1.0)
 SystemRequirements: GNU make
 VignetteBuilder: knitr
 Encoding: UTF-8

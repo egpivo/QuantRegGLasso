@@ -17,7 +17,7 @@
 #' @param tol: A tolerance rate 
 #' @return A list of selected parameters
 awgl_omega <- function(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol) {
-    .Call('_QuantRegGLasso_awgl_omega', PACKAGE = 'QuantRegGLasso', Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
+    .Call(`_QuantRegGLasso_awgl_omega`, Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 }
 
 #' Internal function: Quantile regression with adaptively group lasso without input Omega
@@ -34,6 +34,6 @@ awgl_omega <- function(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol
 #' @param tol: A tolerance rate 
 #' @return A list of selected parameters
 awgl <- function(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol) {
-    .Call('_QuantRegGLasso_awgl', PACKAGE = 'QuantRegGLasso', Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
+    .Call(`_QuantRegGLasso_awgl`, Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
 }
 
