@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 awgl_omega <- function(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol) {
-    .Call('_qrpQuanReg_awgl_omega', PACKAGE = 'qrpQuanReg', Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
+    .Call('_QuantRegGroups_awgl_omega', PACKAGE = 'QuantRegGroups', Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 }
 
 awgl <- function(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol) {
-    .Call('_qrpQuanReg_awgl', PACKAGE = 'qrpQuanReg', Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
+    .Call('_QuantRegGroups_awgl', PACKAGE = 'QuantRegGroups', Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
 }
 

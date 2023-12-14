@@ -6,9 +6,14 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // awgl_omega
 Rcpp::List awgl_omega(const arma::mat Y, const arma::mat W, const arma::mat omega, const arma::vec lambda, const double tau, const int qn, double zeta, double zetaincre, int maxit, double tol);
-RcppExport SEXP _qrpQuanReg_awgl_omega(SEXP YSEXP, SEXP WSEXP, SEXP omegaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
+RcppExport SEXP _QuantRegGroups_awgl_omega(SEXP YSEXP, SEXP WSEXP, SEXP omegaSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -28,7 +33,7 @@ END_RCPP
 }
 // awgl
 Rcpp::List awgl(const arma::mat Y, const arma::mat W, const arma::vec lambda, const double tau, const int L, const int qn, double zeta, double zetaincre, int maxit, double tol);
-RcppExport SEXP _qrpQuanReg_awgl(SEXP YSEXP, SEXP WSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP LSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
+RcppExport SEXP _QuantRegGroups_awgl(SEXP YSEXP, SEXP WSEXP, SEXP lambdaSEXP, SEXP tauSEXP, SEXP LSEXP, SEXP qnSEXP, SEXP zetaSEXP, SEXP zetaincreSEXP, SEXP maxitSEXP, SEXP tolSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -48,12 +53,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_qrpQuanReg_awgl_omega", (DL_FUNC) &_qrpQuanReg_awgl_omega, 10},
-    {"_qrpQuanReg_awgl", (DL_FUNC) &_qrpQuanReg_awgl, 10},
+    {"_QuantRegGroups_awgl_omega", (DL_FUNC) &_QuantRegGroups_awgl_omega, 10},
+    {"_QuantRegGroups_awgl", (DL_FUNC) &_QuantRegGroups_awgl, 10},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_qrpQuanReg(DllInfo *dll) {
+RcppExport void R_init_QuantRegGroups(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

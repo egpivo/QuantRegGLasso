@@ -1,15 +1,38 @@
-Package: qrpQuanReg
-Type: Package
-Title: Adaptively weighted group lasso for semiparametic quantile regression models
+Package: QuantRegGroups
+Title: Adaptively Weighted Group Lasso for Semiparametic Quantile rRgression Models
 Version: 0.0.1
-Authors@R: c(
-  person("Wen-Ting", "Wang", email="egpivo@gmail.com", rol = c("aut", "cre", "cph")),
-  person("Wei-Ying", "Wu", email="wuweiying1011@gmail.com", rol = c("aut"))
-)
-Maintainer: Wen-Ting Wang <egpivo@gmail.com>
-Description: Adaptively weighted group lasso for semiparametic quantile regression models
-License: GLP-3
-Imports: Rcpp (>= 0.12.5)
-LinkingTo: Rcpp, RcppArmadillo
+Authors@R: c(person(
+                given = "Wen-Ting",
+                family = "Wang",
+                email = "egpivo@gmail.com",
+                role = c("aut", "cre"),
+                comment = c(ORCID = "0000-0003-3051-7302")
+              ),
+              person(
+                given = "Wei-Ying",
+                family = "Wu",
+                email = "wuweiying1011@gmail.com",
+                role = "aut"
+                )
+            )
+Description: Address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates. (Toshio Honda, Ching-Kang Ing, Wei-Ying Wu, 2019,. <DOI: 10.3150/18-BEJ1091>).
+License: GPL-3
+LazyData: true
+ByteCompile: true
+BugReports: https://github.com/egpivo/SpatPCA/issues
+Depends: 
+    R (>= 3.4.0)
+Imports:
+  Rcpp (>= 1.0.10),
+  RcppParallel (>= 5.1.7)
+LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+Suggests:
+    knitr,
+    rmarkdown,
+SystemRequirements: GNU make
+VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/egpivo/SpatPCA
+Config/testthat/edition: 3

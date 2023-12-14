@@ -21,7 +21,7 @@
 #'  \item omega
 #' }
 #' 
-grp_qr <- function(Y, W, L, omega = NULL, tau, qn = 1, lambda = NULL, maxit = 1000, thr = 1e-04){
+quantRegGroups <- function(Y, W, L, omega = NULL, tau, qn = 1, lambda = NULL, maxit = 1000, thr = 1e-04){
   
   if(is.null(lambda)) {
     nlambda <- 51
@@ -66,7 +66,7 @@ grp_qr <- function(Y, W, L, omega = NULL, tau, qn = 1, lambda = NULL, maxit = 10
 #'  \item b_function
 #'  \item z
 #' }
-B_orth <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
+bSpline <- function(LLI, degree, bkn, crep_input = NULL, is_approx = FALSE){
   if(is_approx) {
     if(is.null(crep_input)) {
       nrep <- 1e6
