@@ -1,14 +1,14 @@
-## grpQuanReg Package
-
-[![Travis-CI Build Status](https://travis-ci.org/egpivo/grpQuanReg.svg?branch=master)](https://travis-ci.org/egpivo/grpQuanReg)
+## QuantRegGroups Package
+[![R build status](https://github.com/egpivo/QuantRegGroups/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGroups/actions)
+[![Coverage Status](https://img.shields.io/codecov/c/github/egpivo/QuantRegGroups/master.svg)](https://app.codecov.io/github/egpivo/QuantRegGroups?branch=master)
 
 ## Description
-**grpQuanReg** is an R package designed for meticulously crafted to address adaptively weighted group Lasso procedures. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates.
+**QuantRegGroups** is an R package meticulously crafted to address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates.
 
 ## Installation
 - **Install the current development version from GitHub**:
    ```r
-   remotes::install_github("egpivo/grpQuanReg")
+   remotes::install_github("egpivo/QuantRegGroups")
    ```
 
 **Please Note:**
