@@ -4,17 +4,17 @@
 #' Internal function: Quantile regression with adaptively group lasso with the input omega
 #' @keywords internal
 #' 
-#' @param Y: data matrix (n x 1)
-#' @param W: B-splines with covariates matrix (n x pL)
-#' @param omega: Weights for group lasso
-#' @param lambda: A sequence of tuning parameters 
-#' @param tau: A quantile of interest
-#' @param L: The number of groups
-#' @param qn: A bound parameter for HDIC
-#' @param zeta: A step parameter
-#' @param zetaincre: An increment of each step
-#' @param maxit: The maximum number of iterations
-#' @param tol: A tolerance rate 
+#' @param Y data matrix (n x 1)
+#' @param W B-splines with covariates matrix (n x pL)
+#' @param omega Weights for group lasso
+#' @param lambda A sequence of tuning parameters 
+#' @param tau A quantile of interest
+#' @param L The number of groups
+#' @param qn A bound parameter for HDIC
+#' @param zeta A step parameter
+#' @param zetaincre An increment of each step
+#' @param maxit The maximum number of iterations
+#' @param tol A tolerance rate 
 #' @return A list of selected parameters
 awgl_omega <- function(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol) {
     .Call(`_QuantRegGLasso_awgl_omega`, Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
@@ -22,16 +22,16 @@ awgl_omega <- function(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol
 
 #' Internal function: Quantile regression with adaptively group lasso without input Omega
 #' 
-#' @param Y: data matrix (n x 1)
-#' @param W: B-splines with covariates matrix (n x pL)
-#' @param lambda: A sequence of tuning parameters 
-#' @param tau: A quantile of interest
-#' @param L: The number of groups
-#' @param qn: A bound parameter for HDIC
-#' @param zeta: A step parameter
-#' @param zetaincre: An increment of each step
-#' @param maxit: The maximum number of iterations
-#' @param tol: A tolerance rate 
+#' @param Y data matrix (n x 1)
+#' @param W B-splines with covariates matrix (n x pL)
+#' @param lambda A sequence of tuning parameters 
+#' @param tau A quantile of interest
+#' @param L The number of groups
+#' @param qn A bound parameter for HDIC
+#' @param zeta A step parameter
+#' @param zetaincre An increment of each step
+#' @param maxit The maximum number of iterations
+#' @param tol A tolerance rate 
 #' @return A list of selected parameters
 awgl <- function(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol) {
     .Call(`_QuantRegGLasso_awgl`, Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)

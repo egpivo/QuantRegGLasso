@@ -49,3 +49,46 @@ This function returns a \code{list} including:
 \description{
 Adaptively weighted group Lasso
 }
+\examples{
+# Example 1: Basic usage with default parameters
+set.seed(123)
+n <- 100
+pL <- 10
+Y <- matrix(rnorm(n), n, 1)
+W <- matrix(rnorm(n * pL), n, pL)
+
+# Call qrglasso with default parameters
+result_default <- qrglasso(Y = Y, W = W, L = 2)
+
+# Print the result
+print(result_default)
+
+# Example 2: Custom usage with specified parameters
+# Generate synthetic data
+set.seed(456)
+n <- 150
+pL <- 15
+Y_custom <- matrix(rnorm(n), n, 1)
+W_custom <- matrix(rnorm(n * pL), n, pL)
+omega_matrix <- matrix(rep(1, pL), ncol = 1)
+# Call qrglasso with custom parameters
+result_custom <- qrglasso(
+  Y = Y_custom,
+  W = W_custom,
+  L = 3,
+  omega = omega_matrix,
+  tau = 0.7,
+  qn = 1.5,
+  lambda = c(0.01, 0.1, 1),
+  maxit = 500,
+  thr = 1e-05
+)
+print(result_custom)
+
+}
+\references{
+Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. \emph{Bernoulli} \bold{225} 4B.
+}
+\author{
+Wen-Ting Wang
+}

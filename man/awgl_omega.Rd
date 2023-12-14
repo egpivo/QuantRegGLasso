@@ -7,27 +7,27 @@
 awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 }
 \arguments{
-\item{Y:}{data matrix (n x 1)}
+\item{Y}{data matrix (n x 1)}
 
-\item{W:}{B-splines with covariates matrix (n x pL)}
+\item{W}{B-splines with covariates matrix (n x pL)}
 
-\item{omega:}{Weights for group lasso}
+\item{omega}{Weights for group lasso}
 
-\item{lambda:}{A sequence of tuning parameters}
+\item{lambda}{A sequence of tuning parameters}
 
-\item{tau:}{A quantile of interest}
+\item{tau}{A quantile of interest}
 
-\item{L:}{The number of groups}
+\item{qn}{A bound parameter for HDIC}
 
-\item{qn:}{A bound parameter for HDIC}
+\item{zeta}{A step parameter}
 
-\item{zeta:}{A step parameter}
+\item{zetaincre}{An increment of each step}
 
-\item{zetaincre:}{An increment of each step}
+\item{maxit}{The maximum number of iterations}
 
-\item{maxit:}{The maximum number of iterations}
+\item{tol}{A tolerance rate}
 
-\item{tol:}{A tolerance rate}
+\item{L}{The number of groups}
 }
 \value{
 A list of selected parameters

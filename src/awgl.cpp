@@ -245,17 +245,17 @@ void qrinit(const arma::mat Y,
 //' Internal function: Quantile regression with adaptively group lasso with the input omega
 //' @keywords internal
 //' 
-//' @param Y: data matrix (n x 1)
-//' @param W: B-splines with covariates matrix (n x pL)
-//' @param omega: Weights for group lasso
-//' @param lambda: A sequence of tuning parameters 
-//' @param tau: A quantile of interest
-//' @param L: The number of groups
-//' @param qn: A bound parameter for HDIC
-//' @param zeta: A step parameter
-//' @param zetaincre: An increment of each step
-//' @param maxit: The maximum number of iterations
-//' @param tol: A tolerance rate 
+//' @param Y data matrix (n x 1)
+//' @param W B-splines with covariates matrix (n x pL)
+//' @param omega Weights for group lasso
+//' @param lambda A sequence of tuning parameters 
+//' @param tau A quantile of interest
+//' @param L The number of groups
+//' @param qn A bound parameter for HDIC
+//' @param zeta A step parameter
+//' @param zetaincre An increment of each step
+//' @param maxit The maximum number of iterations
+//' @param tol A tolerance rate 
 //' @return A list of selected parameters
 // [[Rcpp::export]]
 Rcpp::List awgl_omega(const arma::mat Y,
@@ -269,18 +269,6 @@ Rcpp::List awgl_omega(const arma::mat Y,
                       int maxit,
                       double tol) {
   /* Quantile regression with adaptively group lasso with the input omega
-   * Parameters
-   *    - Y: data matrix (n x 1)
-   *    - W: B-splines with covariates matrix (n x pL)
-   *    - omega: weights for group lasso
-   *    - lambda: a sequence of tuning parameters 
-   *    - tau: quantile of interest
-   *    - L: number of groups
-   *    - qn: bound parameter for HDIC
-   *    - zeta: step parameter
-   *    - zetaincre: increment of each step
-   *    - maxit: maximum number of iterations
-   *    - tol: tolerance rate 
    * Returns
    *    - gamma: target estimate
    *    - xi, phi: auxiliary estimate in the ADMM algorithm
@@ -364,16 +352,16 @@ Rcpp::List awgl_omega(const arma::mat Y,
 
 //' Internal function: Quantile regression with adaptively group lasso without input Omega
 //' 
-//' @param Y: data matrix (n x 1)
-//' @param W: B-splines with covariates matrix (n x pL)
-//' @param lambda: A sequence of tuning parameters 
-//' @param tau: A quantile of interest
-//' @param L: The number of groups
-//' @param qn: A bound parameter for HDIC
-//' @param zeta: A step parameter
-//' @param zetaincre: An increment of each step
-//' @param maxit: The maximum number of iterations
-//' @param tol: A tolerance rate 
+//' @param Y data matrix (n x 1)
+//' @param W B-splines with covariates matrix (n x pL)
+//' @param lambda A sequence of tuning parameters 
+//' @param tau A quantile of interest
+//' @param L The number of groups
+//' @param qn A bound parameter for HDIC
+//' @param zeta A step parameter
+//' @param zetaincre An increment of each step
+//' @param maxit The maximum number of iterations
+//' @param tol A tolerance rate 
 //' @return A list of selected parameters
 // [[Rcpp::export]]
 Rcpp::List awgl(const arma::mat Y,
@@ -387,17 +375,6 @@ Rcpp::List awgl(const arma::mat Y,
                 int maxit,
                 double tol) {
   /* Quantile regression with adaptively group lasso without input Omega
-   * Parameters
-   *    - Y: data matrix (n x 1)
-   *    - W: B-splines with covariates matrix (n x pL)
-   *    - lambda: a sequence of tuning parameters 
-   *    - tau: quantile of interest
-   *    - L: number of groups
-   *    - qn: bound parameter for HDIC
-   *    - zeta: step parameter
-   *    - zetaincre: increment of each step
-   *    - maxit: maximum number of iterations
-   *    - tol: tolerance rate 
    * Returns
    *    - gamma: target estimate
    *    - xi, phi: auxiliary estimate in the ADMM algorithm
