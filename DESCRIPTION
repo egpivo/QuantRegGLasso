@@ -13,7 +13,19 @@ Authors@R: c(person(
                 family = "Wu",
                 email = "wuweiying1011@gmail.com",
                 role = "aut"
-                )
+                ),
+              person(
+                given = "Toshio",
+                family = "Honda",
+                email="t.honda@r.hit-u.ac.jp",
+                rol = c("aut")),
+              person(
+                given = "Ching-Kang",
+                family = "Ing",
+                email="cking@stat.nthu.edu.tw",
+                rol = c("aut"),
+                comment = c(ORCID = "0000-0003-1362-8246")
+              )
             )
 Description: Address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates. (Toshio Honda, Ching-Kang Ing, Wei-Ying Wu, 2019,. <DOI: 10.3150/18-BEJ1091>).
 License: GPL-3

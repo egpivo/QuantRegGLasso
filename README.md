@@ -24,7 +24,9 @@
 
 ### Author
 - [Wen-Ting Wang](https://www.linkedin.com/in/wen-ting-wang-6083a17b)
-- [Wei-Ying_Wu](https://projecteuclid.org/search?author=Wei-Ying_Wu)
+- [Wei-Ying Wu](https://projecteuclid.org/search?author=Wei-Ying_Wu)
+- [Toshio Honda](https://www1.econ.hit-u.ac.jp/honda/e-honda.html)
+- [Ching-Kang Ing](https://www.researchgate.net/profile/Ching-Kang-Ing)
 
  
 ### Maintainer
