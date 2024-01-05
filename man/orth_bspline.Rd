@@ -24,7 +24,11 @@ orth_bspline(
 \item{is_approx}{Boolean. The default is \code{FALSE}.}
 }
 \value{
-Matrix Orthogonalized B-splines with column size p.
+his function returns a \code{list} including:
+\itemize{
+\item{bsplines}{Matrix Orthogonalized B-splines with dimenstion (p, length(knots) + degree + 1}
+\item{z}{Predictors used in generation)}
+}
 }
 \description{
 Orthogonalized B-splines
@@ -38,4 +42,9 @@ x <- seq(from = 0, to = 1,length.out = total_knots)
 knots <- x[2:(total_knots - 1)]
 predictors <- runif(p, min = 0, max = 1)
 bsplines <- orth_bspline(knots, boundaries, degree, predictors)
+# Plot the first 5 B-splints
+par(mfrow=c(1, 5))
+for(i in 1:5)
+  plot(bsplines$z, bsplines$bsplines[i,], main=i, type="l")
+
 }

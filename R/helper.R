@@ -4,7 +4,11 @@
 #' @param degree Integer. The degree of the piecewise polynomial.
 #' @param predictors Array. The predictor variables with size p.
 #' @param is_approx Boolean. The default is `FALSE`.
-#' @return Matrix Orthogonalized B-splines with column size p.
+#' @return his function returns a \code{list} including:
+#' \itemize{
+#'  \item{bsplines}{Matrix Orthogonalized B-splines with dimenstion (p, length(knots) + degree + 1}
+#'  \item{z}{Predictors used in generation)}
+#' }
 #' 
 #' @export
 #' @examples
@@ -16,6 +20,11 @@
 #' knots <- x[2:(total_knots - 1)]
 #' predictors <- runif(p, min = 0, max = 1)
 #' bsplines <- orth_bspline(knots, boundaries, degree, predictors)
+#' # Plot the first 5 B-splints
+#' par(mfrow=c(1, 5))
+#' for(i in 1:5)
+#'   plot(bsplines$z, bsplines$bsplines[i,], main=i, type="l")
+#'
 orth_bspline <- function(
     knots, boundary_knots, degree, predictors = NULL, is_approx = FALSE
   ) {
@@ -52,6 +61,7 @@ orth_bspline <- function(
         degree = degree,
         intercept = TRUE
       )
+
     LL <- dim(bs0)[2]
     bs1 <- matrix(0, nrow = nrep, ncol = LL)
     a0 <- diag(LL)
@@ -78,13 +88,20 @@ orth_bspline <- function(
     }
     
     if (is.null(predictors) || is_approx == FALSE) {
-      b_splines <- bs1
+      bsplines <- bs1
+      z <- x
     } else {
       idx <-
         sapply(1:length(predictors), function(i)
           which(x == predictors[i])[1])
-      b_splines <- bs1[unlist(idx),]
+      bsplines <- bs1[unlist(idx),]
+      z <- predictors
     }
     
-    return(matrix(t(b_splines), ncol = length(predictors)))
+    return(
+      list(
+        bsplines = matrix(bsplines, ncol = length(predictors)),
+        z = z
+      )
+    )
 }

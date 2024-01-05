@@ -15,10 +15,12 @@ test_that("orth_bspline generates orthogonalized B-splines", {
   bsplines <- orth_bspline(knots, boundaries, degree, predictors)
   
   # Check if the output is a matrix
-  expect_true(is.matrix(bsplines))
+  expect_true(is.matrix(bsplines$bsplines))
   
-  # Check if the number of columns is equal to the length of predictors
-  expect_equal(ncol(bsplines), length(predictors))
+  # Check if the number of rows/columns is equal to the length of predictors
+  expect_equal(ncol(bsplines$bsplines), total_knots + degree + 1)
+  expect_equal(nrow(bsplines$bsplines), length(predictors))
 
-  expect_lte(sum(bsplines)-8.017837, tol)
+  expect_lte(sum(bsplines$bsplines) - 8.017837, tol)
+  expect_lte(sum(bsplines$z) - 15, tol)
 })
