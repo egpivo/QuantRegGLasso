@@ -19,13 +19,16 @@
 #' x <- seq(from = 0, to = 1,length.out = total_knots)
 #' knots <- x[2:(total_knots - 1)]
 #' predictors <- runif(p, min = 0, max = 1)
-#' bsplines <- orth_bspline(knots, boundaries, degree, predictors)
+#' bsplines <- orthgonize_bspline(knots, boundaries, degree, predictors)
 #' # Plot the first 5 B-splints
+#' index <- order(bsplines$z)
+#' originalPar <- par(no.readonly = TRUE)
 #' par(mfrow=c(1, 5))
 #' for(i in 1:5)
-#'   plot(bsplines$z, bsplines$bsplines[i,], main=i, type="l")
-#'
-orth_bspline <- function(
+#'   plot(bsplines$z[index], bsplines$bsplines[index, i], main=i, type="l")
+#' par(originalPar)
+#' 
+orthgonize_bspline <- function(
     knots, boundary_knots, degree, predictors = NULL, is_approx = FALSE
   ) {
     if (is_approx) {

@@ -12,7 +12,7 @@ test_that("orth_bspline generates orthogonalized B-splines", {
   knots <- seq(from = 0, to = 1, length.out = total_knots)
   
   # Call the function
-  bsplines <- orth_bspline(knots, boundaries, degree, predictors)
+  bsplines <- orthgonize_bspline(knots, boundaries, degree, predictors)
   
   # Check if the output is a matrix
   expect_true(is.matrix(bsplines$bsplines))
