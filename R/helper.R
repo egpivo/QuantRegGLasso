@@ -100,7 +100,7 @@ orth_bspline <- function(
     
     return(
       list(
-        bsplines = matrix(bsplines, ncol = length(predictors)),
+        bsplines = matrix(bsplines, ncol = length(knots) + degree + 1),
         z = z
       )
     )
