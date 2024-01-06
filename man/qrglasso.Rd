@@ -124,6 +124,39 @@ for (i in 1:n) {
 result <- qrglasso(as.matrix(y), W, L - 1)
 
 
+# Extract relevant information from the result
+approx_bsplines <- orthogonize_bspline(knots, boundaries, degree)
+bsplines <- approx_bsplines$bsplines[, -1]
+z <- approx_bsplines$z
+L_star <- L - 1
+gamma_hat <- result$gamma[, which.min(result$BIC[, 1])]
+g1_BIC <- bsplines \%*\% gamma_hat[1:L_star]
+g2_BIC <- bsplines \%*\% gamma_hat[(L_star + 1):(2 * L_star)]
+
+g10 <- bsplines \%*\% result$gamma[, 1][1:L_star]
+g20 <- bsplines \%*\% result$gamma[, 1][(L_star + 1):(2 * L_star)]
+
+# Plotting
+original_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+
+# Plot for g1(z)
+plot(z, g1(z), type = 'l', lwd = 4, cex.lab = 2, lty = 2, cex.axis = 1.5, ylim = c(-3, 3))
+lines(z, g10, col = 2, lwd = 2)
+lines(z, g1_BIC, col = 3, lwd = 2)
+legend("topleft", c("True", expression(lambda == 0), expression(lambda[BIC])), col = c(1, 2, 3), 
+       lty = c(2, 1, 1), lwd = c(3, 3, 3), horiz = TRUE, bty = "n")
+
+# Plot for g2(z)
+plot(z, rep(0, length(z)), type = 'l', lwd = 4, cex.lab = 2, lty = 2, cex.axis = 1.5, 
+     ylab = "g2(z)", ylim = c(-0.1, 0.1))
+lines(z, g20, col = 2, lwd = 2)
+lines(z, g2_BIC, col = 3, lwd = 2)
+legend("topleft", c("True", expression(lambda == 0), expression(lambda[BIC])), col = c(1, 2, 3, 4), 
+       lty = c(2, 1, 1, 1), lwd = c(3, 3, 3, 3), horiz = TRUE, bty = "n")
+       
+par(original_par)
+
 }
 \references{
 Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. \emph{Bernoulli} \bold{225} 4B.
