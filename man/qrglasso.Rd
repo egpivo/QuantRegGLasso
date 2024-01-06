@@ -63,7 +63,7 @@ result_default <- qrglasso(Y = Y, W = W, L = 2)
 # Print the result
 print(result_default)
 
-# Example 2: Custom usage with specified parameters
+# Example 1: Naive Example
 # Generate synthetic data
 set.seed(456)
 n <- 150
@@ -84,6 +84,78 @@ result_custom <- qrglasso(
   thr = 1e-05
 )
 print(result_custom)
+
+# Example 2: One true non-linear covariate function
+# Define the function g1
+g1 <- function(x) { 
+  (3 * sin(2 * pi * x) / (2 - sin(2 * pi * x))) - 0.4641016 
+}
+
+# Set parameters
+n <- 150
+p <- 150
+err_sd <- 0.1 ** 2
+tau <- 0.9
+
+# Generate synthetic data
+set.seed(1234)
+x <- matrix(runif(n * p, min = 0, max = 1), n, p)
+error_tau <- rnorm(n, sd = err_sd) - qnorm(tau, sd = err_sd)
+y <- g1(x[, 1]) + error_tau
+y <- y - mean(y)
+
+# B-spline parameters
+total_knots <- 5
+degree <- 2
+boundaries <- c(0, 1)
+xx <- seq(from = 0, to = 1, length.out = total_knots)
+knots <- xx[2:(total_knots - 1)]
+
+# Create B-spline matrix W
+L <- total_knots + degree - 1
+W <- matrix(0, nrow = n, ncol = p * (L - 1))
+
+for (i in 1:n) {
+  bspline_result <- orthogonize_bspline(knots, boundaries, degree, x[i, ])
+  W[i, ] <- matrix(t(sqrt(L) * bspline_result$bsplines[, -1]), ncol = p * (L - 1), nrow = 1)
+}
+
+# Perform quantile regression with group Lasso
+result <- qrglasso(as.matrix(y), W, L - 1)
+
+
+# Extract relevant information from the result
+approx_bsplines <- orthogonize_bspline(knots, boundaries, degree)
+bsplines <- approx_bsplines$bsplines[, -1]
+z <- approx_bsplines$z
+L_star <- L - 1
+gamma_hat <- result$gamma[, which.min(result$BIC[, 1])]
+g1_BIC <- bsplines \%*\% gamma_hat[1:L_star]
+g2_BIC <- bsplines \%*\% gamma_hat[(L_star + 1):(2 * L_star)]
+
+g10 <- bsplines \%*\% result$gamma[, 1][1:L_star]
+g20 <- bsplines \%*\% result$gamma[, 1][(L_star + 1):(2 * L_star)]
+
+# Plotting
+original_par <- par(no.readonly = TRUE)
+par(mfrow = c(1, 2))
+
+# Plot for g1(z)
+plot(z, g1(z), type = 'l', lwd = 4, cex.lab = 2, lty = 2, cex.axis = 1.5, ylim = c(-3, 3))
+lines(z, g10, col = 2, lwd = 2)
+lines(z, g1_BIC, col = 3, lwd = 2)
+legend("topleft", c("True", expression(lambda == 0), expression(lambda[BIC])), col = c(1, 2, 3), 
+       lty = c(2, 1, 1), lwd = c(3, 3, 3), horiz = TRUE, bty = "n")
+
+# Plot for g2(z)
+plot(z, rep(0, length(z)), type = 'l', lwd = 4, cex.lab = 2, lty = 2, cex.axis = 1.5, 
+     ylab = "g2(z)", ylim = c(-0.1, 0.1))
+lines(z, g20, col = 2, lwd = 2)
+lines(z, g2_BIC, col = 3, lwd = 2)
+legend("topleft", c("True", expression(lambda == 0), expression(lambda[BIC])), col = c(1, 2, 3, 4), 
+       lty = c(2, 1, 1, 1), lwd = c(3, 3, 3, 3), horiz = TRUE, bty = "n")
+       
+par(original_par)
 
 }
 \references{
