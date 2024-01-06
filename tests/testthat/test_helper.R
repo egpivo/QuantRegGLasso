@@ -85,5 +85,3 @@ test_that("orthogonize_bspline produces consistent results with a random seed", 
   bsplines2 <- orthogonize_bspline(knots, boundaries, degree = 3, predictors)
   expect_identical(bsplines1, bsplines2)
 })
-
-

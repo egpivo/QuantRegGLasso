@@ -35,7 +35,7 @@
 #' # Print the result
 #' print(result_default)
 #'
-#' # Example 2: Custom usage with specified parameters
+#' # Example 1: Naive Example
 #' # Generate synthetic data
 #' set.seed(456)
 #' n <- 150
@@ -56,7 +56,46 @@
 #'   thr = 1e-05
 #' )
 #' print(result_custom)
-#'
+#' 
+#' # Example 2: One true non-linear covariate function
+#' # Define the function g1
+#' g1 <- function(x) { 
+#'   (3 * sin(2 * pi * x) / (2 - sin(2 * pi * x))) - 0.4641016 
+#' }
+#' 
+#' # Set parameters
+#' n <- 150
+#' p <- 150
+#' err_sd <- 0.1 ** 2
+#' tau <- 0.9
+#' 
+#' # Generate synthetic data
+#' set.seed(1234)
+#' x <- matrix(runif(n * p, min = 0, max = 1), n, p)
+#' error_tau <- rnorm(n, sd = err_sd) - qnorm(tau, sd = err_sd)
+#' y <- g1(x[, 1]) + error_tau
+#' y <- y - mean(y)
+#' 
+#' # B-spline parameters
+#' total_knots <- 5
+#' degree <- 2
+#' boundaries <- c(0, 1)
+#' xx <- seq(from = 0, to = 1, length.out = total_knots)
+#' knots <- xx[2:(total_knots - 1)]
+#' 
+#' # Create B-spline matrix W
+#' L <- total_knots + degree - 1
+#' W <- matrix(0, nrow = n, ncol = p * (L - 1))
+#' 
+#' for (i in 1:n) {
+#'   bspline_result <- orthogonize_bspline(knots, boundaries, degree, x[i, ])
+#'   W[i, ] <- matrix(t(sqrt(L) * bspline_result$bsplines[, -1]), ncol = p * (L - 1), nrow = 1)
+#' }
+#' 
+#' # Perform quantile regression with group Lasso
+#' result <- qrglasso(as.matrix(y), W, L - 1)
+#' 
+#' 
 qrglasso <-
   function(Y,
            W,
