@@ -85,3 +85,36 @@ test_that("orthogonize_bspline produces consistent results with a random seed", 
   bsplines2 <- orthogonize_bspline(knots, boundaries, degree = 3, predictors)
   expect_identical(bsplines1, bsplines2)
 })
+
+
+# Mock qrglasso class object for testing
+mock_qrglasso <- structure(list(L = 10), class = "qrglasso")
+
+test_that("check_predict_parameters correctly validates parameters", {
+  # Valid parameters
+  expect_silent(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(0, 1)))
+  
+  # Invalid object
+  expect_error(check_predict_parameters(list(), top_k = 3, degree = 2, boundaries = c(0, 1)),
+               "Invalid object! Please enter a `qrglasso` object")
+  
+  # Negative top_k
+  expect_error(check_predict_parameters(mock_qrglasso, top_k = -2, degree = 2, boundaries = c(0, 1)),
+               "Please enter a positive top k")
+  
+  # Negative degree
+  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = -1, boundaries = c(0, 1)),
+               "Please enter a positive degree")
+  
+  # Incorrect boundaries size
+  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(0, 1, 2)),
+               "Please enter a size 2 boundaries.")
+  
+  # Invalid boundaries order
+  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(1, 0)),
+               "Please input valid boundaries consisting of two elements in ascending order.")
+  
+  # Total knots less than or equal to 0
+  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 11, boundaries = c(0, 1)),
+               "Please enter a smaller degree")
+})

@@ -1,8 +1,5 @@
-# test_qrglasso.R
-
-# Load required libraries
 library(testthat)
-library(QuantRegGLasso)  # Replace with your actual package name
+library(QuantRegGLasso)
 tol <- 1e-4
 
 # Test case for qrglasso function
@@ -51,4 +48,32 @@ test_that("qrglasso with omega", {
   expect_lte(min(result$phi[,3]) + 0.1345752,  tol)
   expect_lte(min(result$xi[,3]) + 1.99916,  tol)
   expect_lte(min(result$gamma[,3]) + 0.1345752, tol)
+})
+
+# Mock qrglasso class object for testing
+mock_qrglasso <- structure(list(
+  L = 5,
+  gamma = matrix(rnorm(400), nrow = 4),
+  BIC = matrix(runif(10), nrow = 5),
+  omega = matrix(runif(120), nrow = 6)
+), class = "qrglasso")
+
+test_that("predictcoefficient functions", {
+  # Valid parameters
+  expect_silent(predict(mock_qrglasso))
+  
+  # Invalid object
+  expect_error(predict(list()))
+  
+  # Negative top_k
+  expect_error(predict(mock_qrglasso, top_k = -2))
+  
+  # Negative degree
+  expect_error(predict(mock_qrglasso, degree = -1))
+  
+  # Incorrect boundaries size
+  expect_error(predict(mock_qrglasso, boundaries = c(0, 1, 2)))
+  
+  # Invalid boundaries order
+  expect_error(predict(mock_qrglasso, boundaries = c(1, 0)))
 })
