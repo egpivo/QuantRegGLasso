@@ -22,10 +22,16 @@
     <loc>/reference/awgl_omega.html</loc>
   </url>
   <url>
+    <loc>/reference/check_predict_parameters.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
     <loc>/reference/orthogonize_bspline.html</loc>
+  </url>
+  <url>
+    <loc>/reference/predict.html</loc>
   </url>
   <url>
     <loc>/reference/qrglasso.html</loc>
