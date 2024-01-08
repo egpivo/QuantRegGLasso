@@ -22,42 +22,7 @@
 #' @references Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. \emph{Bernoulli} \bold{225} 4B.
 #' @export
 #' @examples
-#' # Example 1: Basic usage with default parameters
-#' set.seed(123)
-#' n <- 100
-#' pL <- 10
-#' Y <- matrix(rnorm(n), n, 1)
-#' W <- matrix(rnorm(n * pL), n, pL)
-#'
-#' # Call qrglasso with default parameters
-#' result_default <- qrglasso(Y = Y, W = W, L = 2)
-#'
-#' # Print the result
-#' print(result_default)
-#'
-#' # Example 1: Naive Example
-#' # Generate synthetic data
-#' set.seed(456)
-#' n <- 150
-#' pL <- 15
-#' Y_custom <- matrix(rnorm(n), n, 1)
-#' W_custom <- matrix(rnorm(n * pL), n, pL)
-#' omega_matrix <- matrix(rep(1, pL), ncol = 1)
-#' # Call qrglasso with custom parameters
-#' result_custom <- qrglasso(
-#'   Y = Y_custom,
-#'   W = W_custom,
-#'   L = 3,
-#'   omega = omega_matrix,
-#'   tau = 0.7,
-#'   qn = 1.5,
-#'   lambda = c(0.01, 0.1, 1),
-#'   maxit = 500,
-#'   thr = 1e-05
-#' )
-#' print(result_custom)
-#' 
-#' # Example 2: One true non-linear covariate function
+#' # Example: One true non-linear covariate function
 #' # Define the function g1
 #' g1 <- function(x) { 
 #'   (3 * sin(2 * pi * x) / (2 - sin(2 * pi * x))) - 0.4641016 
@@ -174,4 +139,47 @@ qrglasso <-
     
     class(obj.cv) <- "qrglasso"
     return(obj.cv)
+  }
+
+
+#' @title Predict the coefficient functions
+#'
+#' @description Predict the top-k coefficient functions
+#'
+#' @param qrglasso_object An `qrglasso` class object.
+#' @param top_k Integer. A matrix of the top K estimated functions. Default is 5.
+#' @param degree Integer. Degree of the piecewise polynomial. Default is 2.
+#' @param boundaries Array. Two boundary points. Default is c(0, 1).
+#' @param is_approx Logical. If TRUE, the size of covariate indexes will be 1e6; otherwise, 1e4. Default is FALSE.
+#' @seealso \link{qrglasso}
+#' @return A prediction matrix of Y at the new locations, x_new.
+#' @examples
+#' set.seed(123)
+#' n <- 100
+#' p <- 5
+#' L <- 5
+#' Y <- matrix(rnorm(n), n, 1)
+#' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
+#'
+#' # Call qrglasso with default parameters
+#' result <- qrglasso(Y = Y, W = W, L = 5)
+#' estimate <- predict(result) 
+#' print(dim(estimate))
+#' 
+predict <-
+  function(qrglasso_object,
+           top_k = 5,
+           degree = 2,
+           boundaries = c(0, 1),
+           is_approx = FALSE) {
+    check_predict_parameters(qrglasso_object, top_k, degree, boundaries)
+    total_knots <- qrglasso_object$L - degree + 1
+    x <- seq(boundaries[1],  boundaries[2], length.out = total_knots)
+    knots <- x[2:(total_knots - 1)]
+    approx_bsplines <-orthogonize_bspline(knots, boundaries, degree, is_approx=is_approx)
+    bsplines <- approx_bsplines$bsplines[,-1]
+    z <- approx_bsplines$z
+    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])]
+    estimate <- bsplines %*%  matrix(gamma_hat, nrow = dim(bsplines)[2])
+    return(estimate[, 1:min(top_k, dim(estimate)[2])])
   }

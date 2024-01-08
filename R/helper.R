@@ -115,4 +115,3 @@ check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries)
     stop("Please enter a smaller degree")
   }
 }
-
