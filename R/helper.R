@@ -25,7 +25,6 @@
 #'   plot(bsplines$z[index], bsplines$bsplines[index, i], main = i, type = "l")
 #' par(original_par)
 #' 
-
 orthogonize_bspline <- function(
     knots, boundary_knots, degree, predictors = NULL, is_approx = FALSE
 ) {
@@ -83,3 +82,37 @@ orthogonize_bspline <- function(
     z = z_values
   ))
 }
+
+
+#'
+#' Internal function: Validate new locations for a qrglasso_object object
+#'
+#' @keywords internal
+#' @param qrglasso_object An `qrglasso` class object.
+#' @param top_k Integer. A matrix of the top K estimated functions.
+#' @param degree Integer. Degree of the piecewise polynomial.
+#' @param boundaries Array. Two boundary points.
+#' @return `NULL`.
+#'
+check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries) {
+  if (!inherits(qrglasso_object, "qrglasso")) {
+    stop("Invalid object! Please enter a `qrglasso` object")
+  }
+  if (top_k <= 0) {
+    stop("Please enter a positive top k")
+  }
+  if (degree <= 0) {
+    stop("Please enter a positive degree")
+  }
+  if (length(boundaries) != 2) {
+    stop("Please enter a size 2 boundaries.")
+  }
+  if (boundaries[1] >= boundaries[2]) {
+    stop("Please input valid boundaries consisting of two elements in ascending order.")
+  }
+  total_knots = qrglasso_object$L - degree + 1
+  if (total_knots <= 0) {
+    stop("Please enter a smaller degree")
+  }
+}
+
