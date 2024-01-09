@@ -7,7 +7,7 @@
 plot_coefficient_function(data, variate)
 }
 \arguments{
-\item{data}{A dataframe contains columns \code{z}, \code{coef}}
+\item{data}{A dataframe contains columns \code{z}, \code{coefficient}}
 
 \item{variate}{A character represent the title}
 }

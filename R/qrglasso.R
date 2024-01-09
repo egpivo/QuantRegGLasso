@@ -146,12 +146,12 @@ qrglasso <-
 #'
 #' @description Predict the top-k coefficient functions
 #'
-#' @param qrglasso_object An `qrglasso` class object.
+#' @param qrglasso_object An  \code{qrglasso} class object.
 #' @param top_k Integer. A matrix of the top K estimated functions. Default is 5.
 #' @param degree Integer. Degree of the piecewise polynomial. Default is 2.
 #' @param boundaries Array. Two boundary points. Default is c(0, 1).
 #' @param is_approx Logical. If TRUE, the size of covariate indexes will be 1e6; otherwise, 1e4. Default is FALSE.
-#' @seealso \link{qrglasso}
+#' @seealso \code{\link{qrglasso}}
 #' @return A list containing:
 #'   \item{coef_functions}{Matrix. Top-k coefficient function estimates with dimenstion (\eqn{m \times k}) where $m$ is size of `z`.}
 #'   \item{z}{Array. Index predictors used in generation}
@@ -195,10 +195,10 @@ predict <-
 #'
 #' @description Display the estimated coefficient functions by BIC
 #'
-#' @param x An qrglasso.predict class object for `plot` method
+#' @param x An object of class \code{qrglasso.predict} for the \code{plot} method
 #' @param ... Not used directly
-#' @return `NULL`.
-#' @seealso \link{qrglasso}
+#' @return \code{NULL}
+#' @seealso \code{\link{qrglasso}}
 #'
 #' @export
 #' @method plot qrglasso.predict
@@ -223,9 +223,10 @@ plot.qrglasso.predict <- function(x, ...) {
   result <- list()
   for (i in 1:k) {
     variate <- paste0("Coefficient function - g", i)
-    data <- data.frame(z = x$z, coef = x$coef_functions[,i])
+    data <- data.frame(z = x$z, coefficient = x$coef_functions[,i])
     result[[variate]] <- plot_coefficient_function(data, variate)
   }
   plot_sequentially(result)
   par(originalPar)
 }
+

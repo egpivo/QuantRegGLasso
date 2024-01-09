@@ -77,3 +77,4 @@ test_that("predictcoefficient functions", {
   # Invalid boundaries order
   expect_error(predict(mock_qrglasso, boundaries = c(1, 0)))
 })
+

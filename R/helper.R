@@ -123,11 +123,11 @@ check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries)
 #' 
 plot_sequentially <- function(objs) {
   originalPar <- par(no.readonly = TRUE)
-  on.exit(par(par(originalPar)))
+  on.exit(par(originalPar))
   par(ask = TRUE)
   suppressWarnings({
     for (obj in objs) {
-      print(obj)
+      suppressWarnings(print(obj))
     }
   })
   par(ask = FALSE)

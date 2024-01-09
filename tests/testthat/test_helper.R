@@ -127,7 +127,7 @@ test_that("plot_sequentially prints ggplot2 objects", {
 
   # Capture the current environment before calling the function
   original_env <- environment()
-  
+
   # Test the function
   plot_sequentially(list(plot1, plot2))
   

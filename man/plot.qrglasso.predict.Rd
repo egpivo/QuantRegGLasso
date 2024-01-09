@@ -7,12 +7,12 @@
 \method{plot}{qrglasso.predict}(x, ...)
 }
 \arguments{
-\item{x}{An qrglasso.predict class object for \code{plot} method}
+\item{x}{An object of class \code{qrglasso.predict} for the \code{plot} method}
 
 \item{...}{Not used directly}
 }
 \value{
-\code{NULL}.
+\code{NULL}
 }
 \description{
 Display the estimated coefficient functions by BIC
@@ -31,5 +31,5 @@ plot(estimate)
 
 }
 \seealso{
-\link{qrglasso}
+\code{\link{qrglasso}}
 }
