@@ -24,7 +24,9 @@ predict(
 \item{is_approx}{Logical. If TRUE, the size of covariate indexes will be 1e6; otherwise, 1e4. Default is FALSE.}
 }
 \value{
-A prediction matrix of Y at the new locations, x_new.
+A list containing:
+\item{coef_functions}{Matrix. Top-k coefficient function estimates with dimenstion (\eqn{m \times k}) where $m$ is size of \code{z}.}
+\item{z}{Array. Index predictors used in generation}
 }
 \description{
 Predict the top-k coefficient functions
@@ -40,7 +42,7 @@ W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 # Call qrglasso with default parameters
 result <- qrglasso(Y = Y, W = W, L = 5)
 estimate <- predict(result) 
-print(dim(estimate))
+print(dim(estimate$coef_functions))
 
 }
 \seealso{

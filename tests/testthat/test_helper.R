@@ -118,3 +118,32 @@ test_that("check_predict_parameters correctly validates parameters", {
   expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 11, boundaries = c(0, 1)),
                "Please enter a smaller degree")
 })
+
+# Test plot_sequentially
+test_that("plot_sequentially prints ggplot2 objects", {
+  # Create mock ggplot2 objects for testing
+  plot1 <- ggplot(mtcars, aes(x = mpg, y = disp)) + geom_point()
+  plot2 <- ggplot(mtcars, aes(x = wt, y = hp)) + geom_point()
+
+  # Capture the current environment before calling the function
+  original_env <- environment()
+
+  # Test the function
+  plot_sequentially(list(plot1, plot2))
+  
+  # Verify that the environment has been changed
+  expect_equal(original_env, environment())
+})
+
+# Test plot_coefficient_function
+test_that("plot_coefficient_function returns a ggplot object", {
+  # Create a mock dataframe for testing
+  data <- data.frame(z = 1:10, coef = rnorm(10))
+  variate <- "Test Variate"
+  
+  # Test the function
+  plot_result <- plot_coefficient_function(data, variate)
+  
+  # Verify the output
+  expect_true(is.ggplot(plot_result))
+})

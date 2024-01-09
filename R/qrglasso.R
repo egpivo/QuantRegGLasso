@@ -146,13 +146,15 @@ qrglasso <-
 #'
 #' @description Predict the top-k coefficient functions
 #'
-#' @param qrglasso_object An `qrglasso` class object.
+#' @param qrglasso_object An  \code{qrglasso} class object.
 #' @param top_k Integer. A matrix of the top K estimated functions. Default is 5.
 #' @param degree Integer. Degree of the piecewise polynomial. Default is 2.
 #' @param boundaries Array. Two boundary points. Default is c(0, 1).
 #' @param is_approx Logical. If TRUE, the size of covariate indexes will be 1e6; otherwise, 1e4. Default is FALSE.
-#' @seealso \link{qrglasso}
-#' @return A prediction matrix of Y at the new locations, x_new.
+#' @seealso \code{\link{qrglasso}}
+#' @return A list containing:
+#'   \item{coef_functions}{Matrix. Top-k coefficient function estimates with dimenstion (\eqn{m \times k}) where $m$ is size of `z`.}
+#'   \item{z}{Array. Index predictors used in generation}
 #' @examples
 #' set.seed(123)
 #' n <- 100
@@ -164,7 +166,7 @@ qrglasso <-
 #' # Call qrglasso with default parameters
 #' result <- qrglasso(Y = Y, W = W, L = 5)
 #' estimate <- predict(result) 
-#' print(dim(estimate))
+#' print(dim(estimate$coef_functions))
 #' 
 predict <-
   function(qrglasso_object,
@@ -181,5 +183,50 @@ predict <-
     z <- approx_bsplines$z
     gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])]
     estimate <- bsplines %*%  matrix(gamma_hat, nrow = dim(bsplines)[2])
-    return(estimate[, 1:min(top_k, dim(estimate)[2])])
+    obj.predict <- list(
+      coef_functions = as.matrix(estimate[, 1:min(top_k, dim(estimate)[2])]),
+      z = z
+    )
+    class(obj.predict) <- "qrglasso.predict"
+    return(obj.predict)
   }
+
+#' @title  Display the estimated coefficient functions
+#'
+#' @description Display the estimated coefficient functions by BIC
+#'
+#' @param x An object of class \code{qrglasso.predict} for the \code{plot} method
+#' @param ... Not used directly
+#' @return \code{NULL}
+#' @seealso \code{\link{qrglasso}}
+#'
+#' @export
+#' @method plot qrglasso.predict
+#' @examples
+#' set.seed(123)
+#' n <- 100
+#' p <- 5
+#' L <- 5
+#' Y <- matrix(rnorm(n), n, 1)
+#' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
+#'
+#' result <- qrglasso(Y = Y, W = W, L = 5)
+#' estimate <- predict(result, top_k = 2)
+#' plot(estimate)
+#'
+plot.qrglasso.predict <- function(x, ...) {
+  if (!inherits(x, "qrglasso.predict")) {
+    stop("Invalid object! Please enter a `qrglasso.predict` object")
+  }
+  originalPar <- par(no.readonly = TRUE)
+  k <- dim(x$coef_functions)[2]
+  result <- list()
+  for (i in 1:k) {
+    variate <- paste0("Coefficient function - g", i)
+    data <- data.frame(z = x$z, coefficient = x$coef_functions[,i])
+    result[[variate]] <- plot_coefficient_function(data, variate)
+  }
+  plot_sequentially(result)
+  par(originalPar)
+}
+

@@ -115,3 +115,38 @@ check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries)
     stop("Please enter a smaller degree")
   }
 }
+
+#' Internal function: Plot sequentially
+#' @keywords internal
+#' @param objs Valid ggplot2 objects
+#' @return `NULL`
+#' 
+plot_sequentially <- function(objs) {
+  originalPar <- par(no.readonly = TRUE)
+  on.exit(par(originalPar))
+  par(ask = TRUE)
+  suppressWarnings({
+    for (obj in objs) {
+      suppressWarnings(print(obj))
+    }
+  })
+  par(ask = FALSE)
+}
+
+#' Internal function: Plot 2D fields for cross validation results 
+#' @keywords internal
+#' @param data A dataframe contains columns ``z``, ``coefficient``
+#' @param variate A character represent the title
+#' @return A ggplot object
+plot_coefficient_function <- function(data, variate) {
+  default_theme <- theme_classic() +
+    theme(
+      text = element_text(size = 24),
+      plot.title = element_text(hjust = 0.5)
+    )
+  result <- ggplot(data, aes(x = z, y = coefficient)) +
+    geom_point(col="#4634eb") +
+    ggtitle(variate) +
+    default_theme
+  return(result)
+}
