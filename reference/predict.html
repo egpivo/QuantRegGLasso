@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">QuantRegGLasso</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -88,8 +88,14 @@
     <h2>Value</h2>
     
 
-<p>A prediction matrix of Y at the new locations, x_new.</p>
-    </div>
+<p>A list containing:</p>
+<dl><dt>coef_functions</dt>
+<dd><p>Matrix. Top-k coefficient function estimates with dimenstion (\(m \times k\)) where $m$ is size of <code>z</code>.</p></dd>
+
+<dt>z</dt>
+<dd><p>Array. Index predictors used in generation</p></dd>
+
+</dl></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="qrglasso.html">qrglasso</a></p></div>
@@ -109,7 +115,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> All values of gamma are zeros when lambda &gt;1.84207</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu">predict</span><span class="op">(</span><span class="va">result</span><span class="op">)</span> </span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">$</span><span class="va">coef_functions</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 10000     5</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
