@@ -201,7 +201,7 @@ predict <-
 #' @seealso \link{qrglasso}
 #'
 #' @export
-#' @method plot qrglasso
+#' @method plot qrglasso.predict
 #' @examples
 #' set.seed(123)
 #' n <- 100

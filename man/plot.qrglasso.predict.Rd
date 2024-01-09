@@ -4,7 +4,7 @@
 \alias{plot.qrglasso.predict}
 \title{Display the estimated coefficient functions}
 \usage{
-\method{plot}{qrglasso}(x, ...)
+\method{plot}{qrglasso.predict}(x, ...)
 }
 \arguments{
 \item{x}{An qrglasso.predict class object for \code{plot} method}

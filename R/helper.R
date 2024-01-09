@@ -135,7 +135,7 @@ plot_sequentially <- function(objs) {
 
 #' Internal function: Plot 2D fields for cross validation results 
 #' @keywords internal
-#' @param data A dataframe contains columns ``z``, ``coef``
+#' @param data A dataframe contains columns ``z``, ``coefficient``
 #' @param variate A character represent the title
 #' @return A ggplot object
 plot_coefficient_function <- function(data, variate) {
@@ -144,7 +144,7 @@ plot_coefficient_function <- function(data, variate) {
       text = element_text(size = 24),
       plot.title = element_text(hjust = 0.5)
     )
-  result <- ggplot(data, aes(x = z, y = coef)) +
+  result <- ggplot(data, aes(x = z, y = coefficient)) +
     geom_point(col="#4634eb") +
     ggtitle(variate) +
     default_theme
