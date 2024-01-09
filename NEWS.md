@@ -1,8 +1,15 @@
+## QuantRegGLasso 0.3.0 (Release Date: 2024-01-09)
+### Overview 
+- Added a `plot.qrglasso.predict` function for displaying top k coefficient functions via `qrglasso.predict` object.
+
+---
+
 ## QuantRegGLasso 0.3.0 (Release Date: 2024-01-08)
 ### Overview 
 - Added a `predict` function for estimating top k coefficient functions via `qrglasso` object
 - Added a helper function to meet the pre-conditions of `predict`
 
+---
 
 ## QuantRegGLasso 0.2.0 (Release Date: 2024-01-06)
 ### Overview 
