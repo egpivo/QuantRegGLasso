@@ -125,12 +125,13 @@ plot_sequentially <- function(objs) {
   originalPar <- par(no.readonly = TRUE)
   on.exit(par(par(originalPar)))
   par(ask = TRUE)
-  for (obj in objs) {
-    suppressWarnings(print(obj))
-  }
+  suppressWarnings({
+    for (obj in objs) {
+      print(obj)
+    }
+  })
   par(ask = FALSE)
 }
-
 
 #' Internal function: Plot 2D fields for cross validation results 
 #' @keywords internal

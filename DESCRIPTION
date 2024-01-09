@@ -35,7 +35,7 @@ BugReports: https://github.com/egpivo/QuantRegGLasso/issues
 Depends: 
     R (>= 3.4.0)
 Imports:
-  Rcpp (>= 1.0.10)
+  Rcpp (>= 1.0.10), ggplot2
 LinkingTo: Rcpp, RcppArmadillo
 Suggests:
     knitr,
