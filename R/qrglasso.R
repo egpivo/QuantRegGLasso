@@ -208,7 +208,7 @@ predict <- function(qrglasso_object,
 #' @seealso \code{\link{qrglasso}}
 #'
 #' @export
-#' @method plot qrglasso.predict
+#' @method plot qrglasso
 #' @examples
 #' set.seed(123)
 #' n <- 100
