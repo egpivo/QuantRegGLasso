@@ -1,4 +1,6 @@
 utils::globalVariables(c(
   "z",
-  "coefficient"
+  "coefficient",
+  "bic",
+  "lambda"
 ))
