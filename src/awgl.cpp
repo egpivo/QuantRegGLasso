@@ -239,7 +239,7 @@ void qrinit(const arma::mat Y,
   
   iter++;
   if(iter == maxit)
-    Rcpp::Rcout << "Not converge" << std::endl;
+    Rcpp::Rcout << "Not converge"<< std::endl;
 }
 
 //' Internal function: Quantile regression with adaptively group lasso with the input omega
@@ -334,7 +334,6 @@ Rcpp::List awgl_omega(const arma::mat Y,
       if(sum(abs(phi.col(i))) == 0) {
         for(int j = i + 1; j < n_lambda; j++)
           BIC_lambda.row(j) = BIC_lambda.row(i);
-        //Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
         break;
       }  
     }
@@ -469,8 +468,6 @@ Rcpp::List awgl(const arma::mat Y,
       if(sum(abs(phi.col(i))) == 0) {
         for(int j = i+1; j < n_lambda; j++)
           BIC_lambda.row(j) = BIC_lambda.row(i);
-        
-        //Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
         break;
       }  
     }
