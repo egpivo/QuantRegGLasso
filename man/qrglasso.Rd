@@ -37,14 +37,12 @@ qrglasso(
 }
 \value{
 A list with the following components:
-\itemize{
 \item{\code{gamma}}{A target estimate.}
 \item{\code{xi}}{An auxiliary estimate in the ADMM algorithm.}
 \item{\code{phi}}{An auxiliary estimate in the ADMM algorithm.}
 \item{\code{BIC}}{A sequence of BIC values with respect to different lambdas.}
 \item{\code{lambda}}{A sequence of tuning parameters used in the algorithm.}
 \item{\code{omega}}{A \eqn{p \times 1} weight matrix used in the algorithm.}
-}
 }
 \description{
 Adaptively weighted group Lasso

@@ -10,14 +10,12 @@
 #' @param maxit The maximum number of iterations. Default value is 1000.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
 #' @return A list with the following components:
-#' \itemize{
 #'   \item{\code{gamma}}{A target estimate.}
 #'   \item{\code{xi}}{An auxiliary estimate in the ADMM algorithm.}
 #'   \item{\code{phi}}{An auxiliary estimate in the ADMM algorithm.}
 #'   \item{\code{BIC}}{A sequence of BIC values with respect to different lambdas.}
 #'   \item{\code{lambda}}{A sequence of tuning parameters used in the algorithm.}
 #'   \item{\code{omega}}{A \eqn{p \times 1} weight matrix used in the algorithm.}
-#' }
 #' @author Wen-Ting Wang
 #' @references Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. \emph{Bernoulli} \bold{225} 4B.
 #' @export
