@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper.R
 \name{plot_coefficient_function}
 \alias{plot_coefficient_function}
-\title{Internal function: Plot 2D fields for cross validation results}
+\title{Internal function: Plot Coefficient Function}
 \usage{
 plot_coefficient_function(data, variate)
 }
@@ -15,6 +15,6 @@ plot_coefficient_function(data, variate)
 A ggplot object
 }
 \description{
-Internal function: Plot 2D fields for cross validation results
+Internal function: Plot Coefficient Function
 }
 \keyword{internal}

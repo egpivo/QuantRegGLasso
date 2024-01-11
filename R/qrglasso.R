@@ -9,15 +9,13 @@
 #' @param lambda A sequence of tuning parameters. Default value is NULL.
 #' @param maxit The maximum number of iterations. Default value is 1000.
 #' @param thr Threshold for convergence. Default value is \eqn{10^{-4}}.
-#' @return This function returns a \code{list} including:
-#' \itemize{
-#'  \item{gamma}{A target estimate}
-#'  \item{xi}{An auxiliary estimate in the ADMM algorithm}
-#'  \item{phi}{An auxiliary estimate in the ADMM algorithm}
-#'  \item{BIC}{A sequence of BIC values w.r.t. different lambdas}
-#'  \item{lambda}{A sequence of tuning parameters used in the algorithm.}
-#'  \item{omega}{A $p x 1$ weight matrix used in the algorithm.}
-#' }
+#' @return A list with the following components:
+#'   \item{\code{gamma}}{A target estimate.}
+#'   \item{\code{xi}}{An auxiliary estimate in the ADMM algorithm.}
+#'   \item{\code{phi}}{An auxiliary estimate in the ADMM algorithm.}
+#'   \item{\code{BIC}}{A sequence of BIC values with respect to different lambdas.}
+#'   \item{\code{lambda}}{A sequence of tuning parameters used in the algorithm.}
+#'   \item{\code{omega}}{A \eqn{p \times 1} weight matrix used in the algorithm.}
 #' @author Wen-Ting Wang
 #' @references Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. \emph{Bernoulli} \bold{225} 4B.
 #' @export
@@ -142,11 +140,13 @@ qrglasso <-
   }
 
 
+
 #' @title Predict the coefficient functions
 #'
 #' @description Predict the top-k coefficient functions
 #'
 #' @param qrglasso_object An  \code{qrglasso} class object.
+#' @param metric_type Character. A metric type for gamma selection. e.g., `BIC`, `BIC-log`. Default is `BIC`.
 #' @param top_k Integer. A matrix of the top K estimated functions. Default is 5.
 #' @param degree Integer. Degree of the piecewise polynomial. Default is 2.
 #' @param boundaries Array. Two boundary points. Default is c(0, 1).
@@ -168,28 +168,72 @@ qrglasso <-
 #' estimate <- predict(result) 
 #' print(dim(estimate$coef_functions))
 #' 
-predict <-
-  function(qrglasso_object,
-           top_k = 5,
-           degree = 2,
-           boundaries = c(0, 1),
-           is_approx = FALSE) {
-    check_predict_parameters(qrglasso_object, top_k, degree, boundaries)
-    total_knots <- qrglasso_object$L - degree + 1
-    x <- seq(boundaries[1],  boundaries[2], length.out = total_knots)
-    knots <- x[2:(total_knots - 1)]
-    approx_bsplines <-orthogonize_bspline(knots, boundaries, degree, is_approx=is_approx)
-    bsplines <- approx_bsplines$bsplines[,-1]
-    z <- approx_bsplines$z
-    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])]
-    estimate <- bsplines %*%  matrix(gamma_hat, nrow = dim(bsplines)[2])
-    obj.predict <- list(
-      coef_functions = as.matrix(estimate[, 1:min(top_k, dim(estimate)[2])]),
-      z = z
-    )
-    class(obj.predict) <- "qrglasso.predict"
-    return(obj.predict)
+predict <- function(qrglasso_object,
+                    metric_type = "BIC",
+                    top_k = 5,
+                    degree = 2,
+                    boundaries = c(0, 1),
+                    is_approx = FALSE) {
+  check_predict_parameters(qrglasso_object, metric_type, top_k, degree, boundaries)
+  total_knots <- qrglasso_object$L - degree + 1
+  x <- seq(boundaries[1], boundaries[2], length.out = total_knots)
+  knots <- x[2:(total_knots - 1)]
+  approx_bsplines <- orthogonize_bspline(knots, boundaries, degree, is_approx = is_approx)
+  bsplines <- approx_bsplines$bsplines[, -1]
+  z <- approx_bsplines$z
+  if (metric_type == "BIC") {
+    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])] 
+  } else {
+    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 2])]
   }
+  
+  estimate <- bsplines %*% matrix(gamma_hat, nrow = dim(bsplines)[2])
+  obj.predict <- list(
+    coef_functions = as.matrix(estimate[, 1:min(top_k, dim(estimate)[2])]),
+    z = z
+  )
+  class(obj.predict) <- "qrglasso.predict"
+  return(obj.predict)
+}
+
+#' @title  Display the estimated coefficient functions
+#'
+#' @description Display the estimated coefficient functions by BIC
+#'
+#' @param x An object of class \code{qrglasso.predict} for the \code{plot} method
+#' @param ... Not used directly
+#' @return \code{NULL}
+#' @seealso \code{\link{qrglasso}}
+#'
+#' @export
+#' @method plot qrglasso
+#' @examples
+#' set.seed(123)
+#' n <- 100
+#' p <- 5
+#' L <- 5
+#' Y <- matrix(rnorm(n), n, 1)
+#' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
+#'
+#' result <- qrglasso(Y = Y, W = W, L = 5)
+#' plot(result)
+#'
+plot.qrglasso <- function(x, ...) {
+  if (!inherits(x, "qrglasso")) {
+    stop("Invalid object! Please enter a `qrglasso` object")
+  }
+  originalPar <- par(no.readonly = TRUE)
+  result <- list()
+  variates <- c("BIC", "BIC-log")
+  for (i in 1:2) {
+    variate <- variates[i]
+    data <- data.frame(lambda = x$lambda, bic = x$BIC[,i])
+    result[[variate]] <- plot_bic_result(data, variate)
+  }
+  plot_sequentially(result)
+  par(originalPar)
+}
+
 
 #' @title  Display the estimated coefficient functions
 #'

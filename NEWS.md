@@ -1,4 +1,10 @@
-## QuantRegGLasso 0.3.0 (Release Date: 2024-01-09)
+## QuantRegGLasso 0.5.0 (Release Date: 2024-01-11)
+### Overview 
+- Added a `plot.qrglasso` function for displaying BIC w.r.t. hyperparameters via `qrglasso` object.
+
+---
+
+## QuantRegGLasso 0.4.0 (Release Date: 2024-01-09)
 ### Overview 
 - Added a `plot.qrglasso.predict` function for displaying top k coefficient functions via `qrglasso.predict` object.
 

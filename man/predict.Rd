@@ -6,6 +6,7 @@
 \usage{
 predict(
   qrglasso_object,
+  metric_type = "BIC",
   top_k = 5,
   degree = 2,
   boundaries = c(0, 1),
@@ -13,7 +14,9 @@ predict(
 )
 }
 \arguments{
-\item{qrglasso_object}{An \code{qrglasso} class object.}
+\item{qrglasso_object}{An  \code{qrglasso} class object.}
+
+\item{metric_type}{Character. A metric type for gamma selection. e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
 
 \item{top_k}{Integer. A matrix of the top K estimated functions. Default is 5.}
 
@@ -46,5 +49,5 @@ print(dim(estimate$coef_functions))
 
 }
 \seealso{
-\link{qrglasso}
+\code{\link{qrglasso}}
 }

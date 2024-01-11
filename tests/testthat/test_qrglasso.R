@@ -58,7 +58,7 @@ mock_qrglasso <- structure(list(
   omega = matrix(runif(120), nrow = 6)
 ), class = "qrglasso")
 
-test_that("predictcoefficient functions", {
+test_that("predict coefficient functions", {
   # Valid parameters
   expect_silent(predict(mock_qrglasso))
   
@@ -66,15 +66,17 @@ test_that("predictcoefficient functions", {
   expect_error(predict(list()))
   
   # Negative top_k
-  expect_error(predict(mock_qrglasso, top_k = -2))
+  expect_error(predict(mock_qrglasso, "BIC", -2))
   
   # Negative degree
-  expect_error(predict(mock_qrglasso, degree = -1))
+  expect_error(predict(mock_qrglasso, "BIC", 3, -1))
   
   # Incorrect boundaries size
-  expect_error(predict(mock_qrglasso, boundaries = c(0, 1, 2)))
+  expect_error(predict(mock_qrglasso, "BIC", 3, 2, c(0, 1, 2)))
   
   # Invalid boundaries order
-  expect_error(predict(mock_qrglasso, boundaries = c(1, 0)))
+  expect_error(predict(mock_qrglasso, "BIC", 3, 2, c(1, 0)))
+  
+  # Invalid metric_type
+  expect_error(predict(mock_qrglasso, "invalid_metric"))
 })
-

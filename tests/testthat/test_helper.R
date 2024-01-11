@@ -86,38 +86,41 @@ test_that("orthogonize_bspline produces consistent results with a random seed", 
   expect_identical(bsplines1, bsplines2)
 })
 
-
 # Mock qrglasso class object for testing
 mock_qrglasso <- structure(list(L = 10), class = "qrglasso")
-
 test_that("check_predict_parameters correctly validates parameters", {
   # Valid parameters
-  expect_silent(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(0, 1)))
+  expect_silent(check_predict_parameters(mock_qrglasso, "BIC", 3, 2, c(0, 1)))
   
   # Invalid object
-  expect_error(check_predict_parameters(list(), top_k = 3, degree = 2, boundaries = c(0, 1)),
+  expect_error(check_predict_parameters(list(), "BIC", 3, 2, c(0, 1)),
                "Invalid object! Please enter a `qrglasso` object")
   
+  # Invalid metric_type
+  expect_error(check_predict_parameters(mock_qrglasso, "invalid_metric", 3, 2, c(0, 1)),
+               "Only accept types: `BIC` and `BIC-log`")
+  
   # Negative top_k
-  expect_error(check_predict_parameters(mock_qrglasso, top_k = -2, degree = 2, boundaries = c(0, 1)),
+  expect_error(check_predict_parameters(mock_qrglasso, "BIC", -2, 2, c(0, 1)),
                "Please enter a positive top k")
   
   # Negative degree
-  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = -1, boundaries = c(0, 1)),
+  expect_error(check_predict_parameters(mock_qrglasso, "BIC", 3, -1, c(0, 1)),
                "Please enter a positive degree")
   
   # Incorrect boundaries size
-  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(0, 1, 2)),
+  expect_error(check_predict_parameters(mock_qrglasso, "BIC", 3, 2, c(0, 1, 2)),
                "Please enter a size 2 boundaries.")
   
   # Invalid boundaries order
-  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 2, boundaries = c(1, 0)),
+  expect_error(check_predict_parameters(mock_qrglasso, "BIC", 3, 2, c(1, 0)),
                "Please input valid boundaries consisting of two elements in ascending order.")
   
   # Total knots less than or equal to 0
-  expect_error(check_predict_parameters(mock_qrglasso, top_k = 3, degree = 11, boundaries = c(0, 1)),
+  expect_error(check_predict_parameters(mock_qrglasso, "BIC", 3, 11, c(0, 1)),
                "Please enter a smaller degree")
 })
+
 
 # Test plot_sequentially
 test_that("plot_sequentially prints ggplot2 objects", {
@@ -143,6 +146,19 @@ test_that("plot_coefficient_function returns a ggplot object", {
   
   # Test the function
   plot_result <- plot_coefficient_function(data, variate)
+  
+  # Verify the output
+  expect_true(is.ggplot(plot_result))
+})
+
+# Test plot_coefficient_function
+test_that("plot_bic_result returns a ggplot object", {
+  # Create a mock dataframe for testing
+  data <- data.frame(lambda = 1:10, bic = rnorm(10))
+  variate <- "Test Variate"
+  
+  # Test the function
+  plot_result <- plot_bic_result(data, variate)
   
   # Verify the output
   expect_true(is.ggplot(plot_result))

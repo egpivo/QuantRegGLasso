@@ -84,19 +84,22 @@ orthogonize_bspline <- function(
 }
 
 
-#'
 #' Internal function: Validate new locations for a qrglasso_object object
 #'
 #' @keywords internal
 #' @param qrglasso_object An `qrglasso` class object.
+#' @param metric_type Character. A metric type for gamma selection. e.g., `BIC`, `BIC-log`. Default is `BIC`.
 #' @param top_k Integer. A matrix of the top K estimated functions.
 #' @param degree Integer. Degree of the piecewise polynomial.
 #' @param boundaries Array. Two boundary points.
 #' @return `NULL`.
 #'
-check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries) {
+check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree, boundaries) {
   if (!inherits(qrglasso_object, "qrglasso")) {
     stop("Invalid object! Please enter a `qrglasso` object")
+  }
+  if (!(metric_type %in% c("BIC", "BIC-log"))) {
+    stop("Only accept types: `BIC` and `BIC-log`")
   }
   if (top_k <= 0) {
     stop("Please enter a positive top k")
@@ -133,7 +136,7 @@ plot_sequentially <- function(objs) {
   par(ask = FALSE)
 }
 
-#' Internal function: Plot 2D fields for cross validation results 
+#' Internal function: Plot Coefficient Function
 #' @keywords internal
 #' @param data A dataframe contains columns ``z``, ``coefficient``
 #' @param variate A character represent the title
@@ -150,3 +153,26 @@ plot_coefficient_function <- function(data, variate) {
     default_theme
   return(result)
 }
+
+
+#' Internal function: Plot BIC Results w.r.t. lambda
+#' @keywords internal
+#' @param data A dataframe contains columns ``lambda``, ``bic``
+#' @param variate A character represent the title
+#' @return A ggplot object
+plot_bic_result <- function(data, variate) {
+  default_theme <- theme_classic() +
+    theme(
+      text = element_text(size = 24),
+      plot.title = element_text(hjust = 0.5)
+    )
+  result <- ggplot(data, aes(x = lambda, y = bic)) +
+    geom_point(col="#4634eb") +
+    geom_line() +
+    ggtitle(variate) +
+    xlab(expression(lambda)) +
+    ylab("BIC") +
+    default_theme
+  return(result)
+}
+
