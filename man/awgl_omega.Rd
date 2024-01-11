@@ -26,8 +26,6 @@ awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 \item{maxit}{The maximum number of iterations}
 
 \item{tol}{A tolerance rate}
-
-\item{L}{The number of groups}
 }
 \value{
 A list of selected parameters

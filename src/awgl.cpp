@@ -250,7 +250,6 @@ void qrinit(const arma::mat Y,
 //' @param omega Weights for group lasso
 //' @param lambda A sequence of tuning parameters 
 //' @param tau A quantile of interest
-//' @param L The number of groups
 //' @param qn A bound parameter for HDIC
 //' @param zeta A step parameter
 //' @param zetaincre An increment of each step
