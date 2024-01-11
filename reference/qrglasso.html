@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">QuantRegGLasso</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -108,13 +108,26 @@
     <h2>Value</h2>
     
 
-<p>This function returns a <code>list</code> including:</p><ul><li><p>gammaA target estimate</p></li>
-<li><p>xiAn auxiliary estimate in the ADMM algorithm</p></li>
-<li><p>phiAn auxiliary estimate in the ADMM algorithm</p></li>
-<li><p>BICA sequence of BIC values w.r.t. different lambdas</p></li>
-<li><p>lambdaA sequence of tuning parameters used in the algorithm.</p></li>
-<li><p>omegaA $p x 1$ weight matrix used in the algorithm.</p></li>
-</ul></div>
+<p>A list with the following components:</p>
+<dl><dt><code>gamma</code></dt>
+<dd><p>A target estimate.</p></dd>
+
+<dt><code>xi</code></dt>
+<dd><p>An auxiliary estimate in the ADMM algorithm.</p></dd>
+
+<dt><code>phi</code></dt>
+<dd><p>An auxiliary estimate in the ADMM algorithm.</p></dd>
+
+<dt><code>BIC</code></dt>
+<dd><p>A sequence of BIC values with respect to different lambdas.</p></dd>
+
+<dt><code>lambda</code></dt>
+<dd><p>A sequence of tuning parameters used in the algorithm.</p></dd>
+
+<dt><code>omega</code></dt>
+<dd><p>A \(p \times 1\) weight matrix used in the algorithm.</p></dd>
+
+</dl></div>
     <div id="references">
     <h2>References</h2>
     <p>Toshio Honda, Ching-Kang Ing, Wei-Ying Wu (2019). Adaptively weighted group Lasso for semiparametric quantile regression models. <em>Bernoulli</em> <b>225</b> 4B.</p>

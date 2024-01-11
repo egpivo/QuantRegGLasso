@@ -31,7 +31,13 @@
     <loc>/reference/orthogonize_bspline.html</loc>
   </url>
   <url>
+    <loc>/reference/plot.qrglasso.html</loc>
+  </url>
+  <url>
     <loc>/reference/plot.qrglasso.predict.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_bic_result.html</loc>
   </url>
   <url>
     <loc>/reference/plot_coefficient_function.html</loc>
