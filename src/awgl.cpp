@@ -188,7 +188,7 @@ void qrcore(const arma::mat Y,
   
   iter++;
   if(iter == maxit)
-    Rcpp::Rcout << "Not converge at lambda=" << lambda << "\n" << std::endl;
+    Rcpp::Rcout << "Not converge"<< std::endl;
 }
 
 void qrinit(const arma::mat Y,
@@ -239,7 +239,7 @@ void qrinit(const arma::mat Y,
   
   iter++;
   if(iter == maxit)
-    Rcpp::Rcout << "Not converge with error" << max(er) << "\n" << std::endl;
+    Rcpp::Rcout << "Not converge" << std::endl;
 }
 
 //' Internal function: Quantile regression with adaptively group lasso with the input omega
