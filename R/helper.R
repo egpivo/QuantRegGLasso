@@ -84,19 +84,22 @@ orthogonize_bspline <- function(
 }
 
 
-#'
 #' Internal function: Validate new locations for a qrglasso_object object
 #'
 #' @keywords internal
 #' @param qrglasso_object An `qrglasso` class object.
+#' @param metric_type Character. A metric type for gamma selection. e.g., `BIC`, `BIC-log`. Default is `BIC`.
 #' @param top_k Integer. A matrix of the top K estimated functions.
 #' @param degree Integer. Degree of the piecewise polynomial.
 #' @param boundaries Array. Two boundary points.
 #' @return `NULL`.
 #'
-check_predict_parameters <- function(qrglasso_object, top_k, degree, boundaries) {
+check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree, boundaries) {
   if (!inherits(qrglasso_object, "qrglasso")) {
     stop("Invalid object! Please enter a `qrglasso` object")
+  }
+  if (!(metric_type %in% c("BIC", "BIC-log"))) {
+    stop("Only accept types: `BIC` and `BIC-log`")
   }
   if (top_k <= 0) {
     stop("Please enter a positive top k")

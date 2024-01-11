@@ -4,10 +4,18 @@
 \alias{check_predict_parameters}
 \title{Internal function: Validate new locations for a qrglasso_object object}
 \usage{
-check_predict_parameters(qrglasso_object, top_k, degree, boundaries)
+check_predict_parameters(
+  qrglasso_object,
+  metric_type,
+  top_k,
+  degree,
+  boundaries
+)
 }
 \arguments{
 \item{qrglasso_object}{An \code{qrglasso} class object.}
+
+\item{metric_type}{Character. A metric type for gamma selection. e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
 
 \item{top_k}{Integer. A matrix of the top K estimated functions.}
 

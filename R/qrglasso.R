@@ -142,11 +142,13 @@ qrglasso <-
   }
 
 
+
 #' @title Predict the coefficient functions
 #'
 #' @description Predict the top-k coefficient functions
 #'
 #' @param qrglasso_object An  \code{qrglasso} class object.
+#' @param metric_type Character. A metric type for gamma selection. e.g., `BIC`, `BIC-log`. Default is `BIC`.
 #' @param top_k Integer. A matrix of the top K estimated functions. Default is 5.
 #' @param degree Integer. Degree of the piecewise polynomial. Default is 2.
 #' @param boundaries Array. Two boundary points. Default is c(0, 1).
@@ -168,29 +170,33 @@ qrglasso <-
 #' estimate <- predict(result) 
 #' print(dim(estimate$coef_functions))
 #' 
-predict <-
-  function(qrglasso_object,
-           top_k = 5,
-           degree = 2,
-           boundaries = c(0, 1),
-           is_approx = FALSE) {
-    check_predict_parameters(qrglasso_object, top_k, degree, boundaries)
-    total_knots <- qrglasso_object$L - degree + 1
-    x <- seq(boundaries[1],  boundaries[2], length.out = total_knots)
-    knots <- x[2:(total_knots - 1)]
-    approx_bsplines <-orthogonize_bspline(knots, boundaries, degree, is_approx=is_approx)
-    bsplines <- approx_bsplines$bsplines[,-1]
-    z <- approx_bsplines$z
-    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])]
-    estimate <- bsplines %*%  matrix(gamma_hat, nrow = dim(bsplines)[2])
-    obj.predict <- list(
-      coef_functions = as.matrix(estimate[, 1:min(top_k, dim(estimate)[2])]),
-      z = z
-    )
-    class(obj.predict) <- "qrglasso.predict"
-    return(obj.predict)
+predict <- function(qrglasso_object,
+                    metric_type = "BIC",
+                    top_k = 5,
+                    degree = 2,
+                    boundaries = c(0, 1),
+                    is_approx = FALSE) {
+  check_predict_parameters(qrglasso_object, metric_type, top_k, degree, boundaries)
+  total_knots <- qrglasso_object$L - degree + 1
+  x <- seq(boundaries[1], boundaries[2], length.out = total_knots)
+  knots <- x[2:(total_knots - 1)]
+  approx_bsplines <- orthogonize_bspline(knots, boundaries, degree, is_approx = is_approx)
+  bsplines <- approx_bsplines$bsplines[, -1]
+  z <- approx_bsplines$z
+  if (metric_type == "BIC") {
+    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 1])] 
+  } else {
+    gamma_hat <- qrglasso_object$gamma[, which.min(qrglasso_object$BIC[, 2])]
   }
-
+  
+  estimate <- bsplines %*% matrix(gamma_hat, nrow = dim(bsplines)[2])
+  obj.predict <- list(
+    coef_functions = as.matrix(estimate[, 1:min(top_k, dim(estimate)[2])]),
+    z = z
+  )
+  class(obj.predict) <- "qrglasso.predict"
+  return(obj.predict)
+}
 #' @title  Display the estimated coefficient functions
 #'
 #' @description Display the estimated coefficient functions by BIC
