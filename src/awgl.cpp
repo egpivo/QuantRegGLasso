@@ -334,6 +334,7 @@ Rcpp::List awgl_omega(const arma::mat Y,
       if(sum(abs(phi.col(i))) == 0) {
         for(int j = i + 1; j < n_lambda; j++)
           BIC_lambda.row(j) = BIC_lambda.row(i);
+        //Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
         break;
       }  
     }
@@ -469,7 +470,7 @@ Rcpp::List awgl(const arma::mat Y,
         for(int j = i+1; j < n_lambda; j++)
           BIC_lambda.row(j) = BIC_lambda.row(i);
         
-        Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
+        //Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
         break;
       }  
     }
