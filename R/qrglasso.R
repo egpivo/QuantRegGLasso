@@ -197,6 +197,46 @@ predict <- function(qrglasso_object,
   class(obj.predict) <- "qrglasso.predict"
   return(obj.predict)
 }
+
+#' @title  Display the estimated coefficient functions
+#'
+#' @description Display the estimated coefficient functions by BIC
+#'
+#' @param x An object of class \code{qrglasso.predict} for the \code{plot} method
+#' @param ... Not used directly
+#' @return \code{NULL}
+#' @seealso \code{\link{qrglasso}}
+#'
+#' @export
+#' @method plot qrglasso.predict
+#' @examples
+#' set.seed(123)
+#' n <- 100
+#' p <- 5
+#' L <- 5
+#' Y <- matrix(rnorm(n), n, 1)
+#' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
+#'
+#' result <- qrglasso(Y = Y, W = W, L = 5)
+#' plot(result)
+#'
+plot.qrglasso <- function(x, ...) {
+  if (!inherits(x, "qrglasso")) {
+    stop("Invalid object! Please enter a `qrglasso` object")
+  }
+  originalPar <- par(no.readonly = TRUE)
+  result <- list()
+  variates <- c("BIC", "BIC-log")
+  for (i in 1:2) {
+    variate <- variates[i]
+    data <- data.frame(lambda = x$lambda, bic = x$BIC[,i])
+    result[[variate]] <- plot_bic_result(data, variate)
+  }
+  plot_sequentially(result)
+  par(originalPar)
+}
+
+
 #' @title  Display the estimated coefficient functions
 #'
 #' @description Display the estimated coefficient functions by BIC

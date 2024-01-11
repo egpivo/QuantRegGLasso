@@ -150,3 +150,16 @@ test_that("plot_coefficient_function returns a ggplot object", {
   # Verify the output
   expect_true(is.ggplot(plot_result))
 })
+
+# Test plot_coefficient_function
+test_that("plot_bic_result returns a ggplot object", {
+  # Create a mock dataframe for testing
+  data <- data.frame(lambda = 1:10, bic = rnorm(10))
+  variate <- "Test Variate"
+  
+  # Test the function
+  plot_result <- plot_bic_result(data, variate)
+  
+  # Verify the output
+  expect_true(is.ggplot(plot_result))
+})
