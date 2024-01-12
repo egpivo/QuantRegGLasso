@@ -2,7 +2,7 @@
 
 [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![R build status](https://github.com/egpivo/QuantRegGLasso/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGLasso/actions)
-[![Code Coverage](https://app.codecov.io/gh/egpivo/QuantRegGLasso/branch/master/graph/badge.svg)](https://app.codecov.io/gh/egpivo/QuantRegGLasso)
+[![Code Coverage](https://img.shields.io/codecov/c/github/egpivo/QuantRegGLasso/master.svg)](https://app.codecov.io/github/egpivo/QuantRegGLasso?branch=master)
 
 **QuantRegGLasso** is an R package designed for adaptively weighted group Lasso procedures in quantile regression. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models and additive quantile regression models with ultra-high dimensional covariates.
 
