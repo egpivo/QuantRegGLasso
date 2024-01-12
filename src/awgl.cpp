@@ -241,21 +241,21 @@ void qrinit(const arma::mat Y,
   if(iter == maxit)
     Rcpp::Rcout << "Not converge with error" << max(er) << "\n" << std::endl;
 }
-
-//' Internal function: Quantile Regression with Adaptively Group Lasso with `Omega`
+//' @title Internal function: Quantile Regression with Adaptively Group Lasso with `Omega`
 //' @keywords internal
 //' 
-//' @param Y data matrix \eqn{(n \times 1)}
-//' @param W B-splines with covariates matrix with \eqn{p x L} columns and \eqn{n} rows
-//' @param omega Weights for group lasso
-//' @param lambda A sequence of tuning parameters 
-//' @param tau A quantile of interest
-//' @param qn A bound parameter for HDIC
-//' @param zeta A step parameter
-//' @param zetaincre An increment of each step
-//' @param maxit The maximum number of iterations
-//' @param tol A tolerance rate 
-//' @return A list of selected parameters
+//' @description Internal function: Quantile regression with adaptively group Lasso with `Omega`.
+//' @param Y Data matrix (\eqn{n \times 1}).
+//' @param W B-splines with covariates matrix with \eqn{p \times L} columns and \eqn{n} rows.
+//' @param omega Weights for group lasso.
+//' @param lambda A sequence of tuning parameters.
+//' @param tau A quantile of interest.
+//' @param qn A bound parameter for HDIC.
+//' @param zeta A step parameter.
+//' @param zetaincre An increment of each step.
+//' @param maxit The maximum number of iterations.
+//' @param tol A tolerance rate. 
+//' @return A list of selected parameters.
 // [[Rcpp::export]]
  Rcpp::List awgl_omega(const arma::mat Y,
                        const arma::mat W,
@@ -348,20 +348,21 @@ void qrinit(const arma::mat Y,
                              Rcpp::Named("BIC") = BIC_lambda);
  }
 
-
-//' Internal function: Quantile Regression with Adaptively Group Lasso without `Omega`
+//' @title Internal function: Quantile Regression with Adaptively Group Lasso without `Omega`
+//' @keywords internal
 //' 
-//' @param Y data matrix \eqn{(n \times 1)}
-//' @param W B-splines with covariates matrix with \eqn{p x L} columns and \eqn{n} rows
-//' @param lambda A sequence of tuning parameters 
-//' @param tau A quantile of interest
-//' @param L The number of groups
-//' @param qn A bound parameter for HDIC
-//' @param zeta A step parameter
-//' @param zetaincre An increment of each step
-//' @param maxit The maximum number of iterations
-//' @param tol A tolerance rate 
-//' @return A list of selected parameters
+//' @description Internal function: Quantile regression with adaptively group Lasso without `Omega`.
+//' @param Y Data matrix (\eqn{n \times 1}).
+//' @param W B-splines with covariates matrix with \eqn{p \times L} columns and \eqn{n} rows.
+//' @param lambda A sequence of tuning parameters.
+//' @param tau A quantile of interest.
+//' @param L The number of groups.
+//' @param qn A bound parameter for HDIC.
+//' @param zeta A step parameter.
+//' @param zetaincre An increment of each step.
+//' @param maxit The maximum number of iterations.
+//' @param tol A tolerance rate. 
+//' @return A list of selected parameters.
 // [[Rcpp::export]]
 Rcpp::List awgl(const arma::mat Y,
                 const arma::mat W,

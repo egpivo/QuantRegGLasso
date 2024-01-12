@@ -2,19 +2,19 @@
 % Please edit documentation in R/helper.R
 \name{plot_coefficient_function}
 \alias{plot_coefficient_function}
-\title{Internal function: Plot Coefficient Function}
+\title{Internal Function: Plot Coefficient Function}
 \usage{
 plot_coefficient_function(data, variate)
 }
 \arguments{
-\item{data}{A dataframe containing columns \code{z}, \code{coefficient}}
+\item{data}{Dataframe. A dataframe containing columns \code{z}, \code{coefficient}.}
 
-\item{variate}{A character representing the title}
+\item{variate}{Character. A character representing the title.}
 }
 \value{
-A ggplot object
+A ggplot object.
 }
 \description{
-Internal function: Plot Coefficient Function
+Internal function to plot coefficient functions using ggplot2.
 }
 \keyword{internal}

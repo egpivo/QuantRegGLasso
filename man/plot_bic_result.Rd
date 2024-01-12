@@ -2,19 +2,19 @@
 % Please edit documentation in R/helper.R
 \name{plot_bic_result}
 \alias{plot_bic_result}
-\title{Internal function: Plot BIC Results w.r.t. lambda}
+\title{Internal Function: Plot BIC Results w.r.t. lambda}
 \usage{
 plot_bic_result(data, variate)
 }
 \arguments{
-\item{data}{A dataframe containing columns \code{lambda}, \code{bic}}
+\item{data}{Dataframe. A dataframe containing columns \code{lambda}, \code{bic}.}
 
-\item{variate}{A character representing the title}
+\item{variate}{Character. A character representing the title.}
 }
 \value{
-A ggplot object
+A ggplot object.
 }
 \description{
-Internal function: Plot BIC Results w.r.t. lambda
+Internal function to plot BIC results with respect to lambda using ggplot2.
 }
 \keyword{internal}

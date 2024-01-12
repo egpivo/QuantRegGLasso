@@ -19,9 +19,9 @@ qrglasso(
 \arguments{
 \item{Y}{A \eqn{n \times 1} data matrix where \eqn{n} is the sample size.}
 
-\item{W}{A \eqn{n \times (p \times L) } B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.}
+\item{W}{A \eqn{n \times (p \times L)} B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.}
 
-\item{p}{Numeric. The number of covariates.}
+\item{p}{A numeric indicating the number of covariates.}
 
 \item{omega}{A \eqn{p \times 1} weight matrix. Default value is NULL.}
 
@@ -46,7 +46,7 @@ A list with the following components:
 \item{\code{omega}}{A \eqn{p \times 1} weight matrix used in the algorithm.}
 }
 \description{
-Adaptively Weighted Group Lasso
+The function \code{qrglasso} performs Adaptively Weighted Group Lasso for semiparametric quantile regression models. It estimates the coefficients of a quantile regression model with adaptively weighted group lasso regularization. The algorithm supports the use of B-spline basis functions to model the relationship between covariates and the response variable. Regularization is applied across different groups of covariates, and an adaptive weighting scheme is employed to enhance variable selection.
 }
 \examples{
 # Example: One true non-linear covariate function

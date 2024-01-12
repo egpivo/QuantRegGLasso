@@ -29,9 +29,10 @@ A list containing:
 \item{\code{z}}{Predictors used in generation}
 }
 \description{
-Orthogonalized B-splines
+Generate a set of orthogonalized B-splines using the Gram-Schmidt algorithm applied to the built-in function \code{splines::bs()}.
 }
 \examples{
+# Example: Generate and plot the first 5 orthogonalized B-splines
 p <- 30
 total_knots <- 10
 degree <- 3
@@ -40,6 +41,7 @@ x <- seq(from = 0, to = 1, length.out = total_knots)
 knots <- x[2:(total_knots - 1)]
 predictors <- runif(p, min = 0, max = 1)
 bsplines <- orthogonize_bspline(knots, boundaries, degree, predictors)
+
 # Plot the first 5 B-splines
 index <- order(bsplines$z)
 original_par <- par(no.readonly = TRUE)

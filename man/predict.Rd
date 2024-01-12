@@ -2,7 +2,7 @@
 % Please edit documentation in R/qrglasso.R
 \name{predict}
 \alias{predict}
-\title{Predict Coefficient Functions}
+\title{Predict Top-k Coefficient Functions}
 \usage{
 predict(
   qrglasso_object,
@@ -18,21 +18,21 @@ predict(
 
 \item{metric_type}{Character. Metric type for gamma selection, e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
 
-\item{top_k}{Integer. A matrix of the top K estimated functions. Default is 5.}
+\item{top_k}{Integer. The number of top estimated functions to predict. Default is 5.}
 
 \item{degree}{Integer. Degree of the piecewise polynomial. Default is 2.}
 
-\item{boundaries}{Array. Two boundary points. Default is c(0, 1).}
+\item{boundaries}{Array. Two boundary points for the piecewise polynomial. Default is c(0, 1).}
 
 \item{is_approx}{Logical. If TRUE, the size of covariate indexes will be 1e6; otherwise, 1e4. Default is FALSE.}
 }
 \value{
 A list containing:
-\item{coef_functions}{Matrix. Top-k coefficient function estimates with dimension (\eqn{m \times k}) where $m$ is the size of \code{z}.}
-\item{z}{Array. Index predictors used in generation}
+\item{\code{coef_functions}}{Matrix. The estimated top-k coefficient functions with dimension (\eqn{m \times k}), where \eqn{m} is the size of \code{z}.}
+\item{\code{z}}{Array. Index predictors used in the generation.}
 }
 \description{
-Predict the top-k coefficient functions
+Predict the top-k coefficient functions based on a \code{qrglasso} class object.
 }
 \examples{
 set.seed(123)

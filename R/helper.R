@@ -1,5 +1,6 @@
-#' Orthogonalized B-splines
-#'
+#' @title Orthogonalized B-splines
+#' @description Generate a set of orthogonalized B-splines using the Gram-Schmidt algorithm applied to the built-in function `splines::bs()`.
+#' 
 #' @param knots Array. The knots that define the spline.
 #' @param boundary_knots Array. The breakpoints that define the spline.
 #' @param degree Integer. The degree of the piecewise polynomial.
@@ -10,6 +11,7 @@
 #'   \item{\code{z}}{Predictors used in generation}
 #' @export
 #' @examples
+#' # Example: Generate and plot the first 5 orthogonalized B-splines
 #' p <- 30
 #' total_knots <- 10
 #' degree <- 3
@@ -18,6 +20,7 @@
 #' knots <- x[2:(total_knots - 1)]
 #' predictors <- runif(p, min = 0, max = 1)
 #' bsplines <- orthogonize_bspline(knots, boundaries, degree, predictors)
+#' 
 #' # Plot the first 5 B-splines
 #' index <- order(bsplines$z)
 #' original_par <- par(no.readonly = TRUE)
@@ -26,6 +29,7 @@
 #'   plot(bsplines$z[index], bsplines$bsplines[index, i], main = i, type = "l")
 #' par(original_par)
 #' 
+#' @export
 orthogonize_bspline <- function(
     knots, boundary_knots, degree, predictors = NULL, is_approx = FALSE
 ) {
@@ -84,14 +88,18 @@ orthogonize_bspline <- function(
   ))
 }
 
-#' Internal function: Validate Parameters for Predicting with a `qrglasso` Object
+#' @title Internal Function: Validate Parameters for Prediction with a `qrglasso` Object
 #'
+#' @description Internal function to validate parameters for predicting with a `qrglasso` class object.
+#' 
 #' @keywords internal
+#' 
 #' @param qrglasso_object A `qrglasso` class object.
 #' @param metric_type Character. Metric type for gamma selection, e.g., `BIC`, `BIC-log`. Default is `BIC`.
 #' @param top_k Integer. Top K estimated functions.
 #' @param degree Integer. Degree of the piecewise polynomial.
 #' @param boundaries Array. Two boundary points.
+#' 
 #' @return `NULL`.
 #'
 check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree, boundaries) {
@@ -119,11 +127,16 @@ check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree
   }
 }
 
-#' Internal function: Plot sequentially
+#' @title Internal Function: Plot Sequentially
+#'
+#' @description Internal function to plot ggplot2 objects sequentially.
+#'
 #' @keywords internal
-#' @param objs Valid ggplot2 objects
-#' @return `NULL`
-#' 
+#'
+#' @param objs List. Valid ggplot2 objects to be plotted sequentially.
+#'
+#' @return `NULL`.
+#'
 plot_sequentially <- function(objs) {
   original_par <- par(no.readonly = TRUE)
   on.exit(par(original_par))
@@ -136,11 +149,17 @@ plot_sequentially <- function(objs) {
   par(ask = FALSE)
 }
 
-#' Internal function: Plot Coefficient Function
+#' @title Internal Function: Plot Coefficient Function
+#'
+#' @description Internal function to plot coefficient functions using ggplot2.
+#'
 #' @keywords internal
-#' @param data A dataframe containing columns ``z``, ``coefficient``
-#' @param variate A character representing the title
-#' @return A ggplot object
+#'
+#' @param data Dataframe. A dataframe containing columns ``z``, ``coefficient``.
+#' @param variate Character. A character representing the title.
+#'
+#' @return A ggplot object.
+#' 
 plot_coefficient_function <- function(data, variate) {
   default_theme <- theme_classic() +
     theme(
@@ -154,11 +173,17 @@ plot_coefficient_function <- function(data, variate) {
   return(result)
 }
 
-#' Internal function: Plot BIC Results w.r.t. lambda
+#' @title Internal Function: Plot BIC Results w.r.t. lambda
+#'
+#' @description Internal function to plot BIC results with respect to lambda using ggplot2.
+#'
 #' @keywords internal
-#' @param data A dataframe containing columns ``lambda``, ``bic``
-#' @param variate A character representing the title
-#' @return A ggplot object
+#'
+#' @param data Dataframe. A dataframe containing columns ``lambda``, ``bic``.
+#' @param variate Character. A character representing the title.
+#'
+#' @return A ggplot object.
+#'
 plot_bic_result <- function(data, variate) {
   default_theme <- theme_classic() +
     theme(

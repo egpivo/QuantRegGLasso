@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper.R
 \name{check_predict_parameters}
 \alias{check_predict_parameters}
-\title{Internal function: Validate Parameters for Predicting with a \code{qrglasso} Object}
+\title{Internal Function: Validate Parameters for Prediction with a \code{qrglasso} Object}
 \usage{
 check_predict_parameters(
   qrglasso_object,
@@ -27,6 +27,6 @@ check_predict_parameters(
 \code{NULL}.
 }
 \description{
-Internal function: Validate Parameters for Predicting with a \code{qrglasso} Object
+Internal function to validate parameters for predicting with a \code{qrglasso} class object.
 }
 \keyword{internal}
