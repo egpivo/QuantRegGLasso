@@ -1,5 +1,5 @@
 Package: QuantRegGLasso
-Title: Adaptively Weighted Group Lasso for Semiparametic Quantile Rgression Models
+Title: Adaptively Weighted Group Lasso for Semiparametric Quantile Regression Models
 Version: 1.0.0
 Authors@R: c(person(
                 given = "Wen-Ting",
