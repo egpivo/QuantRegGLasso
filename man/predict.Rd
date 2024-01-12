@@ -43,7 +43,7 @@ Y <- matrix(rnorm(n), n, 1)
 W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 
 # Call qrglasso with default parameters
-result <- qrglasso(Y = Y, W = W, L = 5)
+result <- qrglasso(Y = Y, W = W)
 estimate <- predict(result) 
 print(dim(estimate$coef_functions))
 

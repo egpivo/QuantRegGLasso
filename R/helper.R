@@ -1,12 +1,13 @@
 #' Orthogonalized B-splines
+#'
 #' @param knots Array. The knots that define the spline.
 #' @param boundary_knots Array. The breakpoints that define the spline.
 #' @param degree Integer. The degree of the piecewise polynomial.
 #' @param predictors Array. The predictor variables with size p.
 #' @param is_approx Boolean. The default is `FALSE`.
 #' @return A list containing:
-#'   \item{bsplines}{Matrix of orthogonalized B-splines with dimension (p, length(knots) + degree + 1)}
-#'   \item{z}{Predictors used in generation}
+#'   \item{\code{bsplines}}{Matrix of orthogonalized B-splines with dimensions \eqn{(p, \text{length}(knots) + \text{degree} + 1)}}
+#'   \item{\code{z}}{Predictors used in generation}
 #' @export
 #' @examples
 #' p <- 30
@@ -83,29 +84,28 @@ orthogonize_bspline <- function(
   ))
 }
 
-
-#' Internal function: Validate new locations for a qrglasso_object object
+#' Internal function: Validate Parameters for Predicting with a `qrglasso` Object
 #'
 #' @keywords internal
-#' @param qrglasso_object An `qrglasso` class object.
-#' @param metric_type Character. A metric type for gamma selection. e.g., `BIC`, `BIC-log`. Default is `BIC`.
-#' @param top_k Integer. A matrix of the top K estimated functions.
+#' @param qrglasso_object A `qrglasso` class object.
+#' @param metric_type Character. Metric type for gamma selection, e.g., `BIC`, `BIC-log`. Default is `BIC`.
+#' @param top_k Integer. Top K estimated functions.
 #' @param degree Integer. Degree of the piecewise polynomial.
 #' @param boundaries Array. Two boundary points.
 #' @return `NULL`.
 #'
 check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree, boundaries) {
   if (!inherits(qrglasso_object, "qrglasso")) {
-    stop("Invalid object! Please enter a `qrglasso` object")
+    stop("Invalid object! Please enter a `qrglasso` object.")
   }
   if (!(metric_type %in% c("BIC", "BIC-log"))) {
-    stop("Only accept types: `BIC` and `BIC-log`")
+    stop("Only accept types: `BIC` and `BIC-log`.")
   }
   if (top_k <= 0) {
-    stop("Please enter a positive top k")
+    stop("Please enter a positive top k.")
   }
   if (degree <= 0) {
-    stop("Please enter a positive degree")
+    stop("Please enter a positive degree.")
   }
   if (length(boundaries) != 2) {
     stop("Please enter a size 2 boundaries.")
@@ -113,9 +113,9 @@ check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree
   if (boundaries[1] >= boundaries[2]) {
     stop("Please input valid boundaries consisting of two elements in ascending order.")
   }
-  total_knots = qrglasso_object$L - degree + 1
+  total_knots <- qrglasso_object$L - degree + 1
   if (total_knots <= 0) {
-    stop("Please enter a smaller degree")
+    stop("Please enter a smaller degree.")
   }
 }
 
@@ -125,8 +125,8 @@ check_predict_parameters <- function(qrglasso_object, metric_type, top_k, degree
 #' @return `NULL`
 #' 
 plot_sequentially <- function(objs) {
-  originalPar <- par(no.readonly = TRUE)
-  on.exit(par(originalPar))
+  original_par <- par(no.readonly = TRUE)
+  on.exit(par(original_par))
   par(ask = TRUE)
   suppressWarnings({
     for (obj in objs) {
@@ -138,8 +138,8 @@ plot_sequentially <- function(objs) {
 
 #' Internal function: Plot Coefficient Function
 #' @keywords internal
-#' @param data A dataframe contains columns ``z``, ``coefficient``
-#' @param variate A character represent the title
+#' @param data A dataframe containing columns ``z``, ``coefficient``
+#' @param variate A character representing the title
 #' @return A ggplot object
 plot_coefficient_function <- function(data, variate) {
   default_theme <- theme_classic() +
@@ -148,17 +148,16 @@ plot_coefficient_function <- function(data, variate) {
       plot.title = element_text(hjust = 0.5)
     )
   result <- ggplot(data, aes(x = z, y = coefficient)) +
-    geom_point(col="#4634eb") +
+    geom_point(col = "#4634eb") +
     ggtitle(variate) +
     default_theme
   return(result)
 }
 
-
 #' Internal function: Plot BIC Results w.r.t. lambda
 #' @keywords internal
-#' @param data A dataframe contains columns ``lambda``, ``bic``
-#' @param variate A character represent the title
+#' @param data A dataframe containing columns ``lambda``, ``bic``
+#' @param variate A character representing the title
 #' @return A ggplot object
 plot_bic_result <- function(data, variate) {
   default_theme <- theme_classic() +
@@ -167,7 +166,7 @@ plot_bic_result <- function(data, variate) {
       plot.title = element_text(hjust = 0.5)
     )
   result <- ggplot(data, aes(x = lambda, y = bic)) +
-    geom_point(col="#4634eb") +
+    geom_point(col = "#4634eb") +
     geom_line() +
     ggtitle(variate) +
     xlab(expression(lambda)) +
@@ -175,4 +174,3 @@ plot_bic_result <- function(data, variate) {
     default_theme
   return(result)
 }
-
