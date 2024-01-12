@@ -25,7 +25,7 @@ L <- 5
 Y <- matrix(rnorm(n), n, 1)
 W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 
-result <- qrglasso(Y = Y, W = W)
+result <- qrglasso(Y = Y, W = W, p = p)
 plot(result)
 
 }

@@ -2,6 +2,7 @@
 #'
 #' @param Y A \eqn{n \times 1} data matrix where \eqn{n} is the sample size.
 #' @param W A \eqn{n \times (p \times L) } B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.
+#' @param p Numeric. The number of covariates.
 #' @param omega A \eqn{p \times 1} weight matrix. Default value is NULL.
 #' @param tau A numeric quantile of interest. Default value is 0.5.
 #' @param qn A numeric bound parameter for HDIC. Default value is 1.
@@ -56,7 +57,7 @@
 #' }
 #' 
 #' # Perform quantile regression with group Lasso
-#' result <- qrglasso(as.matrix(y), W)
+#' result <- qrglasso(as.matrix(y), W, p)
 #' # BIC Results
 #' plot(result)
 #' # Prediction
@@ -66,6 +67,7 @@
 #' @export
 qrglasso <- function(Y,
                      W,
+                     p,
                      omega = NULL,
                      tau = 0.5,
                      qn = 1,
@@ -82,7 +84,7 @@ qrglasso <- function(Y,
   
   zeta <- 10
   zetaincre <- 1
-  L_star <- dim(W)[2] / dim(W)[1]
+  L_star <- dim(W)[2] / p
   
   if (is.null(omega))
     result <- awgl(Y, W, lambda, tau, L_star, qn, zeta, zetaincre, maxit, thr)
@@ -129,7 +131,7 @@ qrglasso <- function(Y,
 #' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 #'
 #' # Call qrglasso with default parameters
-#' result <- qrglasso(Y = Y, W = W)
+#' result <- qrglasso(Y = Y, W = W, p = p)
 #' estimate <- predict(result) 
 #' print(dim(estimate$coef_functions))
 #' 
@@ -180,7 +182,7 @@ predict <- function(qrglasso_object,
 #' Y <- matrix(rnorm(n), n, 1)
 #' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 #'
-#' result <- qrglasso(Y = Y, W = W)
+#' result <- qrglasso(Y = Y, W = W, p = p)
 #' plot(result)
 #'
 plot.qrglasso <- function(x, ...) {
@@ -214,10 +216,11 @@ plot.qrglasso <- function(x, ...) {
 #' set.seed(123)
 #' n <- 100
 #' p <- 5
+#' L <- 5
 #' Y <- matrix(rnorm(n), n, 1)
 #' W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 #'
-#' result <- qrglasso(Y = Y, W = W)
+#' result <- qrglasso(Y = Y, W = W, p = p)
 #' estimate <- predict(result, top_k = 2)
 #' plot(estimate)
 #'

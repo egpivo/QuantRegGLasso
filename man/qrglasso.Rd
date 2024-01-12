@@ -7,6 +7,7 @@
 qrglasso(
   Y,
   W,
+  p,
   omega = NULL,
   tau = 0.5,
   qn = 1,
@@ -19,6 +20,8 @@ qrglasso(
 \item{Y}{A \eqn{n \times 1} data matrix where \eqn{n} is the sample size.}
 
 \item{W}{A \eqn{n \times (p \times L) } B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.}
+
+\item{p}{Numeric. The number of covariates.}
 
 \item{omega}{A \eqn{p \times 1} weight matrix. Default value is NULL.}
 
@@ -82,7 +85,7 @@ for (i in 1:n) {
 }
 
 # Perform quantile regression with group Lasso
-result <- qrglasso(as.matrix(y), W)
+result <- qrglasso(as.matrix(y), W, p)
 # BIC Results
 plot(result)
 # Prediction

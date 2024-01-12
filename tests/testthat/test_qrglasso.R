@@ -7,12 +7,14 @@ test_that("qrglasso returns expected results", {
   # Create sample data for testing
   set.seed(123)
   n <- 100
-  pL <- 10
+  p <- 2
+  L <- 5
+  pL <- 2 * 5
   Y <- matrix(rnorm(n), n, 1)
   W <- matrix(rnorm(n * pL), n, pL)
   
   # Call the qrglasso function
-  result <- qrglasso(Y = Y, W = W)
+  result <- qrglasso(Y = Y, W = W, p)
   
   # Perform assertions
   expect_s3_class(result, "qrglasso")
@@ -33,6 +35,7 @@ test_that("qrglasso with omega", {
   result <- qrglasso(
     Y = Y,
     W = W,
+    p = p,
     omega = omega,
     tau = 0.7,
     qn = 1.5,
