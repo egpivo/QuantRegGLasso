@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{awgl}
 \alias{awgl}
-\title{Internal function: Quantile regression with adaptively group lasso without input Omega}
+\title{Internal function: Quantile Regression with Adaptively Group Lasso without \code{Omega}}
 \usage{
 awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
 }
 \arguments{
-\item{Y}{data matrix (n x 1)}
+\item{Y}{data matrix \eqn{(n \times 1)}}
 
-\item{W}{B-splines with covariates matrix (n x pL)}
+\item{W}{B-splines with covariates matrix with \eqn{p x L} columns and \eqn{n} rows}
 
 \item{lambda}{A sequence of tuning parameters}
 
@@ -31,5 +31,5 @@ awgl(Y, W, lambda, tau, L, qn, zeta, zetaincre, maxit, tol)
 A list of selected parameters
 }
 \description{
-Internal function: Quantile regression with adaptively group lasso without input Omega
+Internal function: Quantile Regression with Adaptively Group Lasso without \code{Omega}
 }

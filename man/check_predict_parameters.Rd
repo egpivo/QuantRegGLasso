@@ -2,7 +2,7 @@
 % Please edit documentation in R/helper.R
 \name{check_predict_parameters}
 \alias{check_predict_parameters}
-\title{Internal function: Validate new locations for a qrglasso_object object}
+\title{Internal function: Validate Parameters for Predicting with a \code{qrglasso} Object}
 \usage{
 check_predict_parameters(
   qrglasso_object,
@@ -13,11 +13,11 @@ check_predict_parameters(
 )
 }
 \arguments{
-\item{qrglasso_object}{An \code{qrglasso} class object.}
+\item{qrglasso_object}{A \code{qrglasso} class object.}
 
-\item{metric_type}{Character. A metric type for gamma selection. e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
+\item{metric_type}{Character. Metric type for gamma selection, e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
 
-\item{top_k}{Integer. A matrix of the top K estimated functions.}
+\item{top_k}{Integer. Top K estimated functions.}
 
 \item{degree}{Integer. Degree of the piecewise polynomial.}
 
@@ -27,6 +27,6 @@ check_predict_parameters(
 \code{NULL}.
 }
 \description{
-Internal function: Validate new locations for a qrglasso_object object
+Internal function: Validate Parameters for Predicting with a \code{qrglasso} Object
 }
 \keyword{internal}

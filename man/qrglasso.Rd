@@ -2,7 +2,7 @@
 % Please edit documentation in R/qrglasso.R
 \name{qrglasso}
 \alias{qrglasso}
-\title{Adaptively weighted group Lasso}
+\title{Adaptively Weighted Group Lasso}
 \usage{
 qrglasso(
   Y,
@@ -16,15 +16,15 @@ qrglasso(
 )
 }
 \arguments{
-\item{Y}{A  \eqn{n \times 1} data matrix where \eqn{n} is the sample size.}
+\item{Y}{A \eqn{n \times 1} data matrix where \eqn{n} is the sample size.}
 
-\item{W}{A  \eqn{n \times (p \times L) }B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.}
+\item{W}{A \eqn{n \times (p \times L) } B-spline matrix where \eqn{L} is the number of groups and \eqn{p} is the number of covariates.}
 
 \item{omega}{A \eqn{p \times 1} weight matrix. Default value is NULL.}
 
 \item{tau}{A numeric quantile of interest. Default value is 0.5.}
 
-\item{qn}{A nuneric bound parameter for HDIC.  Default value is 1.}
+\item{qn}{A numeric bound parameter for HDIC. Default value is 1.}
 
 \item{lambda}{A sequence of tuning parameters. Default value is NULL.}
 
@@ -43,7 +43,7 @@ A list with the following components:
 \item{\code{omega}}{A \eqn{p \times 1} weight matrix used in the algorithm.}
 }
 \description{
-Adaptively weighted group Lasso
+Adaptively Weighted Group Lasso
 }
 \examples{
 # Example: One true non-linear covariate function

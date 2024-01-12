@@ -7,9 +7,9 @@
 plot_bic_result(data, variate)
 }
 \arguments{
-\item{data}{A dataframe contains columns \code{lambda}, \code{bic}}
+\item{data}{A dataframe containing columns \code{lambda}, \code{bic}}
 
-\item{variate}{A character represent the title}
+\item{variate}{A character representing the title}
 }
 \value{
 A ggplot object

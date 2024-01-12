@@ -2,7 +2,7 @@
 % Please edit documentation in R/qrglasso.R
 \name{predict}
 \alias{predict}
-\title{Predict the coefficient functions}
+\title{Predict Coefficient Functions}
 \usage{
 predict(
   qrglasso_object,
@@ -14,9 +14,9 @@ predict(
 )
 }
 \arguments{
-\item{qrglasso_object}{An  \code{qrglasso} class object.}
+\item{qrglasso_object}{A \code{qrglasso} class object.}
 
-\item{metric_type}{Character. A metric type for gamma selection. e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
+\item{metric_type}{Character. Metric type for gamma selection, e.g., \code{BIC}, \code{BIC-log}. Default is \code{BIC}.}
 
 \item{top_k}{Integer. A matrix of the top K estimated functions. Default is 5.}
 
@@ -28,7 +28,7 @@ predict(
 }
 \value{
 A list containing:
-\item{coef_functions}{Matrix. Top-k coefficient function estimates with dimenstion (\eqn{m \times k}) where $m$ is size of \code{z}.}
+\item{coef_functions}{Matrix. Top-k coefficient function estimates with dimension (\eqn{m \times k}) where $m$ is the size of \code{z}.}
 \item{z}{Array. Index predictors used in generation}
 }
 \description{

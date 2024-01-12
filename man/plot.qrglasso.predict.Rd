@@ -2,7 +2,7 @@
 % Please edit documentation in R/qrglasso.R
 \name{plot.qrglasso.predict}
 \alias{plot.qrglasso.predict}
-\title{Display the estimated coefficient functions}
+\title{Display Predicted Coefficient Functions}
 \usage{
 \method{plot}{qrglasso.predict}(x, ...)
 }
@@ -15,7 +15,7 @@
 \code{NULL}
 }
 \description{
-Display the estimated coefficient functions by BIC
+Display the predicted coefficient functions by BIC
 }
 \examples{
 set.seed(123)

@@ -7,9 +7,9 @@
 plot_coefficient_function(data, variate)
 }
 \arguments{
-\item{data}{A dataframe contains columns \code{z}, \code{coefficient}}
+\item{data}{A dataframe containing columns \code{z}, \code{coefficient}}
 
-\item{variate}{A character represent the title}
+\item{variate}{A character representing the title}
 }
 \value{
 A ggplot object

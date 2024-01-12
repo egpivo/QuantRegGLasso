@@ -2,14 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{awgl_omega}
 \alias{awgl_omega}
-\title{Internal function: Quantile regression with adaptively group lasso with the input omega}
+\title{Internal function: Quantile Regression with Adaptively Group Lasso with \code{Omega}}
 \usage{
 awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 }
 \arguments{
-\item{Y}{data matrix (n x 1)}
+\item{Y}{data matrix \eqn{(n \times 1)}}
 
-\item{W}{B-splines with covariates matrix (n x pL)}
+\item{W}{B-splines with covariates matrix with \eqn{p x L} columns and \eqn{n} rows}
 
 \item{omega}{Weights for group lasso}
 
@@ -31,6 +31,6 @@ awgl_omega(Y, W, omega, lambda, tau, qn, zeta, zetaincre, maxit, tol)
 A list of selected parameters
 }
 \description{
-Internal function: Quantile regression with adaptively group lasso with the input omega
+Internal function: Quantile Regression with Adaptively Group Lasso with \code{Omega}
 }
 \keyword{internal}

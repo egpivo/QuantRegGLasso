@@ -25,8 +25,8 @@ orthogonize_bspline(
 }
 \value{
 A list containing:
-\item{bsplines}{Matrix of orthogonalized B-splines with dimension (p, length(knots) + degree + 1)}
-\item{z}{Predictors used in generation}
+\item{\code{bsplines}}{Matrix of orthogonalized B-splines with dimensions \eqn{(p, \text{length}(knots) + \text{degree} + 1)}}
+\item{\code{z}}{Predictors used in generation}
 }
 \description{
 Orthogonalized B-splines
