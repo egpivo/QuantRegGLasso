@@ -35,7 +35,7 @@
 #' 
 #' # Set parameters
 #' n <- 100
-#' p <- 100
+#' p <- 50
 #' err_sd <- 0.1 ** 2
 #' tau <- 0.7
 #' 
@@ -55,19 +55,22 @@
 #' 
 #' # Create B-spline matrix W
 #' L <- total_knots + degree - 1
-#' W <- matrix(0, nrow = n, ncol = p * (L - 1))
-#' 
-#' for (i in 1:n) {
-#'   bspline_result <- orthogonize_bspline(knots, boundaries, degree, x[i, ])
-#'   W[i, ] <- matrix(t(sqrt(L) * bspline_result$bsplines[, -1]), ncol = p * (L - 1), nrow = 1)
-#' }
+#' bspline_results <- lapply(1:n, function(i) orthogonize_bspline(knots, boundaries, degree, x[i, ]))
+#' W <- matrix(
+#'    t(sapply(bspline_results, function(result) sqrt(L) * result$bsplines[, -1])), 
+#'    ncol = p * (L - 1),
+#'    byrow = TRUE
+#' )
 #' 
 #' # Perform quantile regression with group Lasso
+#' n_lambda <- 10
+#' max_lambda <- 10
+#' lambda <- c(0, exp(seq(log(max_lambda / 1e4), log(max_lambda), length = (n_lambda - 1))))
 #' result <- qrglasso(as.matrix(y), W, p)
 #' # BIC Results
 #' plot(result)
 #' # Prediction
-#' estimate = predict(result)
+#' estimate = predict(result, top_k = 1)
 #' plot(estimate)
 #' 
 #' @export
@@ -81,13 +84,10 @@ qrglasso <- function(Y,
                      maxit = 1000,
                      thr = 1e-04) {
   if (is.null(lambda)) {
-    nlambda <- 51
-    max.lambda <- 10
-    lambda <- c(0, exp(seq(log(max.lambda / 1e4), log(max.lambda), length = (nlambda - 1))))
-  } else {
-    nlambda <- length(lambda)
+    n_lambda <- 51
+    max_lambda <- 10
+    lambda <- c(0, exp(seq(log(max_lambda / 1e4), log(max_lambda), length = (n_lambda - 1))))
   }
-  
   zeta <- 10
   zetaincre <- 1
   L_star <- dim(W)[2] / p
