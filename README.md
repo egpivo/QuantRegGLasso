@@ -1,7 +1,7 @@
 ## QuantRegGLasso: Adaptively Weighted Group Lasso for Semiparametric Quantile Regression Models
 
 [![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![CRAN](https://www.r-pkg.org/badges/version/Rcpp)](https://cran.r-project.org/package=QuantRegGLasso)
+[![CRAN](https://www.r-pkg.org/badges/version/QuantRegGLasso)](https://cran.r-project.org/package=QuantRegGLasso)
 [![Downloads (monthly)](https://cranlogs.r-pkg.org/badges/QuantRegGLasso?color=brightgreen)](https://www.r-pkg.org/pkg/QuantRegGLasso)
 [![Downloads (total)](https://cranlogs.r-pkg.org/badges/grand-total/QuantRegGLasso?color=brightgreen)](https://www.r-pkg.org/pkg/QuantRegGLasso)
 [![R build status](https://github.com/egpivo/QuantRegGLasso/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGLasso/actions)
@@ -14,19 +14,20 @@
 
 ## Installation
 - Install the current development version from GitHub:
-```r
-remotes::install_github("egpivo/QuantRegGLasso")
-```
+  ```r
+  remotes::install_github("egpivo/QuantRegGLasso")
+  ```
 
 **Please Note:**
 
 - **Windows Users:** Ensure that you have [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed before proceeding with the installation.
 
 - **Mac Users:** You need Xcode Command Line Tools and should install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases). Follow these steps in the terminal:
-```bash
-brew update
-brew install gcc
-    ```
+  ```bash
+  brew update
+  brew install gcc
+  ```
+
 For a detailed solution, refer to this [link](https://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/), or download and install the library [`gfortran`](https://github.com/fxcoudert/gfortran-for-macOS/releases) to resolve the "`ld: library not found for -lgfortran`" error.
 
 
