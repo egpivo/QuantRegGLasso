@@ -12,18 +12,19 @@ Authors@R: c(person(
                 given = "Wei-Ying",
                 family = "Wu",
                 email = "wuweiying1011@gmail.com",
-                role = "aut"
-                ),
+                role = c("aut")
+              ),
               person(
                 given = "Toshio",
                 family = "Honda",
-                email="t.honda@r.hit-u.ac.jp",
-                rol = c("aut")),
+                email = "t.honda@r.hit-u.ac.jp",
+                role = c("aut")
+              ),
               person(
                 given = "Ching-Kang",
                 family = "Ing",
                 email="cking@stat.nthu.edu.tw",
-                rol = c("aut"),
+                role = c("aut"),
                 comment = c(ORCID = "0000-0003-1362-8246")
               )
             )
@@ -42,7 +43,6 @@ Suggests:
     rmarkdown,
     testthat (>= 2.1.0)
 SystemRequirements: GNU make
-VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

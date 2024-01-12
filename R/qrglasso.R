@@ -34,10 +34,10 @@
 #' }
 #' 
 #' # Set parameters
-#' n <- 150
-#' p <- 150
+#' n <- 100
+#' p <- 100
 #' err_sd <- 0.1 ** 2
-#' tau <- 0.9
+#' tau <- 0.7
 #' 
 #' # Generate synthetic data
 #' set.seed(1234)
