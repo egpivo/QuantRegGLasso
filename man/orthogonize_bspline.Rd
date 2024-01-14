@@ -45,9 +45,9 @@ bsplines <- orthogonize_bspline(knots, boundaries, degree, predictors)
 # Plot the first 5 B-splines
 index <- order(bsplines$z)
 original_par <- par(no.readonly = TRUE)
+on.exit(par(original_par))
 par(mfrow = c(1, 5))
 for (i in 1:5)
   plot(bsplines$z[index], bsplines$bsplines[index, i], main = i, type = "l")
-par(original_par)
 
 }
