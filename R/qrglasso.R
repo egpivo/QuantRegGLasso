@@ -200,7 +200,8 @@ plot.qrglasso <- function(x, ...) {
   if (!inherits(x, "qrglasso")) {
     stop("Invalid object! Please enter a `qrglasso` object.")
   }
-  originalPar <- par(no.readonly = TRUE)
+  original_par <- par(no.readonly = TRUE)
+  on.exit(par(original_par))
   result <- list()
   variates <- c("BIC", "BIC-log")
   for (i in 1:2) {
@@ -209,7 +210,6 @@ plot.qrglasso <- function(x, ...) {
     result[[variate]] <- plot_bic_result(data, variate)
   }
   plot_sequentially(result)
-  par(originalPar)
 }
 
 #' @title Display Predicted Coefficient Functions from `qrglasso`
@@ -245,7 +245,8 @@ plot.qrglasso.predict <- function(x, ...) {
   if (!inherits(x, "qrglasso.predict")) {
     stop("Invalid object! Please enter a `qrglasso.predict` object.")
   }
-  originalPar <- par(no.readonly = TRUE)
+  original_par <- par(no.readonly = TRUE)
+  on.exit(par(original_par))
   k <- dim(x$coef_functions)[2]
   result <- list()
   for (i in 1:k) {
@@ -254,5 +255,4 @@ plot.qrglasso.predict <- function(x, ...) {
     result[[variate]] <- plot_coefficient_function(data, variate)
   }
   plot_sequentially(result)
-  par(originalPar)
 }
