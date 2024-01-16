@@ -2,17 +2,17 @@
 % Please edit documentation in R/helper.R
 \name{plot_sequentially}
 \alias{plot_sequentially}
-\title{Internal function: Plot sequentially}
+\title{Internal Function: Plot Sequentially}
 \usage{
 plot_sequentially(objs)
 }
 \arguments{
-\item{objs}{Valid ggplot2 objects}
+\item{objs}{List. Valid ggplot2 objects to be plotted sequentially.}
 }
 \value{
-\code{NULL}
+\code{NULL}.
 }
 \description{
-Internal function: Plot sequentially
+Internal function to plot ggplot2 objects sequentially.
 }
 \keyword{internal}

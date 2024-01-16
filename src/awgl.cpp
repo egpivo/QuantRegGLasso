@@ -241,127 +241,128 @@ void qrinit(const arma::mat Y,
   if(iter == maxit)
     Rcpp::Rcout << "Not converge with error" << max(er) << "\n" << std::endl;
 }
-
-//' Internal function: Quantile regression with adaptively group lasso with the input omega
+//' @title Internal function: Quantile Regression with Adaptively Group Lasso with `Omega`
 //' @keywords internal
 //' 
-//' @param Y data matrix (n x 1)
-//' @param W B-splines with covariates matrix (n x pL)
-//' @param omega Weights for group lasso
-//' @param lambda A sequence of tuning parameters 
-//' @param tau A quantile of interest
-//' @param qn A bound parameter for HDIC
-//' @param zeta A step parameter
-//' @param zetaincre An increment of each step
-//' @param maxit The maximum number of iterations
-//' @param tol A tolerance rate 
-//' @return A list of selected parameters
+//' @description Internal function: Quantile regression with adaptively group Lasso with `Omega`.
+//' @param Y Data matrix (\eqn{n \times 1}).
+//' @param W B-splines with covariates matrix with \eqn{p \times L} columns and \eqn{n} rows.
+//' @param omega Weights for group lasso.
+//' @param lambda A sequence of tuning parameters.
+//' @param tau A quantile of interest.
+//' @param qn A bound parameter for HDIC.
+//' @param zeta A step parameter.
+//' @param zetaincre An increment of each step.
+//' @param maxit The maximum number of iterations.
+//' @param tol A tolerance rate. 
+//' @return A list of selected parameters.
 // [[Rcpp::export]]
-Rcpp::List awgl_omega(const arma::mat Y,
-                      const arma::mat W,
-                      const arma::mat omega,
-                      const arma::vec lambda,
-                      const double tau,
-                      const int qn,
-                      double zeta,
-                      double zetaincre,
-                      int maxit,
-                      double tol) {
-  /* Quantile regression with adaptively group lasso with the input omega
-   * Returns
-   *    - gamma: target estimate
-   *    - xi, phi: auxiliary estimate in the ADMM algorithm
-   *    - theta1, theta2: Lagrangian multipliers
-   *    - BIC: BIC values of different lambdas
-   */
-  int pL = W.n_cols;
-  int n_lambda = lambda.n_elem;
-  int n = Y.n_rows;
-  int p = omega.n_rows;
-  int L = (int) pL / p;
-  
-  arma::mat gamma;
-  arma::mat xi;
-  arma::mat phi;
-  arma::mat theta1;
-  arma::mat theta2;
-  arma::mat Winv, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
-  gamma.zeros(pL, n_lambda);
-  xi.zeros(n, n_lambda);
-  phi.zeros(pL, n_lambda);
-  theta1.zeros(n , n_lambda);
-  theta2.zeros(pL, n_lambda);
-  IpL.eye(pL, pL);
-  BIC_lambda.zeros(n_lambda, 2);
-  
-  /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the correponding BIC*/
-  gammaold = gamma.col(0);
-  xiold = xi.col(0);
-  phiold = phi.col(0);
-  theta1old = theta1.col(0);
-  theta2old = theta2.col(0);
-  qrinit(Y, W, Wt,gammaold, xiold, theta1old, tau, zeta, zetaincre, maxit, tol);
-  BIC_lambda.row(0) = BIC(xiold, gammaold, tau, L, qn);
-  
-  /*compute the gamma, xi, phi, theta1, theta2 w.r.t lambda, and compute the correponding BIC*/
-  gamma.col(0) = gammaold;
-  xi.col(0) = xiold;
-  theta1.col(0) = theta1old;
-  theta2.col(0) = theta2old;
-  
-  if(max(lambda) != 0) {
-    if(pL < n)
-      Winv = arma::inv_sympd(Wt * W + IpL);
-    else
-      Winv = arma::inv_sympd(Wt * W + (1 + (log(pL) / (n + 0.0))) * IpL);
-    
-    Winvt = Winv * Wt;
-    for(int i = 1; i < n_lambda; i++) {
-      gammaold = gamma.col(i - 1);
-      xiold = xi.col(i - 1);
-      phiold = phi.col(i - 1);
-      theta1old = theta1.col(i - 1);
-      theta2old = theta2.col(i - 1);
-      qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
-      BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
-      gamma.col(i) = gammaold;
-      xi.col(i) = xiold;
-      phi.col(i) = phiold;
-      theta1.col(i) = theta1old;
-      theta2.col(i) = theta2old;
-      
-      /* If all elements of phi are zeros at some lambda, break out the loop.*/
-      if(sum(abs(phi.col(i))) == 0) {
-        for(int j = i + 1; j < n_lambda; j++)
-          BIC_lambda.row(j) = BIC_lambda.row(i);
-        Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
-        break;
-      }  
-    }
-  }
-  
-  return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
-                            Rcpp::Named("xi") = xi, 
-                            Rcpp::Named("phi") = phi,
-                            Rcpp::Named("theta1") = theta1, 
-                            Rcpp::Named("theta2") = theta2,
-                            Rcpp::Named("BIC") = BIC_lambda);
-  
-}
+ Rcpp::List awgl_omega(const arma::mat Y,
+                       const arma::mat W,
+                       const arma::mat omega,
+                       const arma::vec lambda,
+                       const double tau,
+                       const int qn,
+                       double zeta,
+                       double zetaincre,
+                       int maxit,
+                       double tol) {
+   /* Quantile regression with adaptively group lasso with the input omega
+    * Returns
+    *    - gamma: target estimate
+    *    - xi, phi: auxiliary estimate in the ADMM algorithm
+    *    - theta1, theta2: Lagrangian multipliers
+    *    - BIC: BIC values of different lambdas
+    */
+   int pL = W.n_cols;
+   int n_lambda = lambda.n_elem;
+   int n = Y.n_rows;
+   int p = omega.n_rows;
+   int L = static_cast<int>(pL / p);
+   
+   arma::mat gamma;
+   arma::mat xi;
+   arma::mat phi;
+   arma::mat theta1;
+   arma::mat theta2;
+   arma::mat Winv, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
+   gamma.zeros(pL, n_lambda);
+   xi.zeros(n, n_lambda);
+   phi.zeros(pL, n_lambda);
+   theta1.zeros(n , n_lambda);
+   theta2.zeros(pL, n_lambda);
+   IpL.eye(pL, pL);
+   BIC_lambda.zeros(n_lambda, 2);
+   
+   /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the corresponding BIC*/
+   gammaold = gamma.col(0);
+   xiold = xi.col(0);
+   phiold = phi.col(0);
+   theta1old = theta1.col(0);
+   theta2old = theta2.col(0);
+   qrinit(Y, W, Wt, gammaold, xiold, theta1old, tau, zeta, zetaincre, maxit, tol);
+   BIC_lambda.row(0) = BIC(xiold, gammaold, tau, L, qn);
+   
+   /* compute the gamma, xi, phi, theta1, theta2 w.r.t lambda, and compute the corresponding BIC*/
+   gamma.col(0) = gammaold;
+   xi.col(0) = xiold;
+   theta1.col(0) = theta1old;
+   theta2.col(0) = theta2old;
+   
+   if (max(lambda) != 0) {
+     if (pL < n)
+       Winv = arma::inv_sympd(Wt * W + IpL);
+     else
+       Winv = arma::inv_sympd(Wt * W + (1 + (log(pL) / (n + 0.0))) * IpL);
+     
+     Winvt = Winv * Wt;
+     for (int i = 1; i < n_lambda; i++) {
+       gammaold = gamma.col(i - 1);
+       xiold = xi.col(i - 1);
+       phiold = phi.col(i - 1);
+       theta1old = theta1.col(i - 1);
+       theta2old = theta2.col(i - 1);
+       qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
+       BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
+       gamma.col(i) = gammaold;
+       xi.col(i) = xiold;
+       phi.col(i) = phiold;
+       theta1.col(i) = theta1old;
+       theta2.col(i) = theta2old;
+       
+       /* If all elements of phi are zeros at some lambda, break out the loop.*/
+       if (arma::sum(arma::abs(phi.col(i))) == 0) {
+         for (int j = i + 1; j < n_lambda; j++)
+           BIC_lambda.row(j) = BIC_lambda.row(i);
+         Rcpp::Rcout << "All values of gamma are zeros when lambda > " << lambda[i] << "\n" << std::endl;
+         break;
+       }  
+     }
+   }
+   
+   return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
+                             Rcpp::Named("xi") = xi, 
+                             Rcpp::Named("phi") = phi,
+                             Rcpp::Named("theta1") = theta1, 
+                             Rcpp::Named("theta2") = theta2,
+                             Rcpp::Named("BIC") = BIC_lambda);
+ }
 
-//' Internal function: Quantile regression with adaptively group lasso without input Omega
+//' @title Internal function: Quantile Regression with Adaptively Group Lasso without `Omega`
+//' @keywords internal
 //' 
-//' @param Y data matrix (n x 1)
-//' @param W B-splines with covariates matrix (n x pL)
-//' @param lambda A sequence of tuning parameters 
-//' @param tau A quantile of interest
-//' @param L The number of groups
-//' @param qn A bound parameter for HDIC
-//' @param zeta A step parameter
-//' @param zetaincre An increment of each step
-//' @param maxit The maximum number of iterations
-//' @param tol A tolerance rate 
-//' @return A list of selected parameters
+//' @description Internal function: Quantile regression with adaptively group Lasso without `Omega`.
+//' @param Y Data matrix (\eqn{n \times 1}).
+//' @param W B-splines with covariates matrix with \eqn{p \times L} columns and \eqn{n} rows.
+//' @param lambda A sequence of tuning parameters.
+//' @param tau A quantile of interest.
+//' @param L The number of groups.
+//' @param qn A bound parameter for HDIC.
+//' @param zeta A step parameter.
+//' @param zetaincre An increment of each step.
+//' @param maxit The maximum number of iterations.
+//' @param tol A tolerance rate. 
+//' @return A list of selected parameters.
 // [[Rcpp::export]]
 Rcpp::List awgl(const arma::mat Y,
                 const arma::mat W,
@@ -382,106 +383,106 @@ Rcpp::List awgl(const arma::mat Y,
    *    - omega: estimate weights for group lasso
    */
   
-  int pL = W.n_cols;
-  int n_lambda = lambda.n_elem;
-  int n = Y.n_rows;
-  int p = (int) pL / L;
-  float scad_weight = 3.7;
-  
-  arma::mat gamma, xi, phi, theta1, theta2, gammaold, xiold, phiold, theta1old, theta2old;
-  arma::mat Winv, Wt, Winvt, omega_fake, IpL, BIC_lambda, omega;
-  gamma.zeros(pL, n_lambda);
-  xi.zeros(n, n_lambda);
-  phi.zeros(pL, n_lambda);
-  theta1.zeros(n , n_lambda);
-  theta2.zeros(pL, n_lambda);
-  IpL.eye(pL, pL);
-  BIC_lambda.zeros(n_lambda, 2);
-  omega_fake.ones(pL, 1);
-  omega.zeros(p, 1);
-  /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the correponding BIC*/
-  gammaold = gamma.col(0);
-  xiold = xi.col(0);
-  phiold = phi.col(0);
-  theta1old = theta1.col(0);
-  theta2old = theta2.col(0);
-  qrinit(Y, W, Wt, gammaold, xiold, theta1old, tau, zeta, zetaincre, maxit, tol);
-  BIC_lambda.row(0) = BIC(xiold, gammaold, tau, L, qn);
-  
-  /*compute the gamma, xi, phi, theta1, theta2 w.r.t lambda, and compute the correponding BIC*/
-  gamma.col(0) = gammaold;
-  xi.col(0) = xiold;
-  theta1.col(0) = theta1old;
-  theta2.col(0) = theta2old;
-  
-  if(max(lambda) != 0) {
-    if(pL < n)
-      Winv = arma::inv_sympd(Wt * W + IpL);
-    else
-      Winv = arma::inv_sympd(Wt * W + (1 + (log(pL) / (n + 0.0))) * IpL);
+    int pL = W.n_cols;
+    int n_lambda = lambda.n_elem;
+    int n = Y.n_rows;
+    int p = static_cast<int>(pL / L);
+    float scad_weight = 3.7;
     
-    Winvt = Winv * Wt;
+    arma::mat gamma, xi, phi, theta1, theta2, gammaold, xiold, phiold, theta1old, theta2old;
+    arma::mat Winv, Wt, Winvt, omega_fake, IpL, BIC_lambda, omega;
+    gamma.zeros(pL, n_lambda);
+    xi.zeros(n, n_lambda);
+    phi.zeros(pL, n_lambda);
+    theta1.zeros(n , n_lambda);
+    theta2.zeros(pL, n_lambda);
+    IpL.eye(pL, pL);
+    BIC_lambda.zeros(n_lambda, 2);
+    omega_fake.ones(pL, 1);
+    omega.zeros(p, 1);
     
-    /* compute omega */
-    for(int i = 1; i < n_lambda; i++) {
-      gammaold = gamma.col(i - 1);
-      xiold = xi.col(i - 1);
-      phiold = phi.col(i - 1);
-      theta1old = theta1.col(i - 1);
-      theta2old = theta2.col(i - 1);
-      qrcore(Y, W, Wt, Winv, Winvt, omega_fake, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
-      BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
-      gamma.col(i) = gammaold;
-      xi.col(i) = xiold;
-      phi.col(i) = phiold;
-      theta1.col(i) = theta1old;
-      theta2.col(i) = theta2old;
+    /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the correponding BIC*/
+    gammaold = gamma.col(0);
+    xiold = xi.col(0);
+    phiold = phi.col(0);
+    theta1old = theta1.col(0);
+    theta2old = theta2.col(0);
+    qrinit(Y, W, Wt, gammaold, xiold, theta1old, tau, zeta, zetaincre, maxit, tol);
+    BIC_lambda.row(0) = BIC(xiold, gammaold, tau, L, qn);
+    
+    /* compute the gamma, xi, phi, theta1, theta2 w.r.t lambda, and compute the correponding BIC*/
+    gamma.col(0) = gammaold;
+    xi.col(0) = xiold;
+    theta1.col(0) = theta1old;
+    theta2.col(0) = theta2old;
+    
+    if (arma::max(lambda) != 0) {
+      if (pL < n)
+        Winv = arma::inv_sympd(Wt * W + IpL);
+      else
+        Winv = arma::inv_sympd(Wt * W + (1 + (std::log(pL) / static_cast<double>(n))) * IpL);
       
-      /* If all elements of phi are zeros at some lambda, break out the loop.*/
-      if(sum(abs(phi.col(i))) == 0) {
-        for(int j = i + 1; j < n_lambda; j++)
-          BIC_lambda.row(j) = BIC_lambda.row(i);
-        break;
+      Winvt = Winv * Wt;
+      
+      /* compute omega */
+      for (int i = 1; i < n_lambda; i++) {
+        gammaold = gamma.col(i - 1);
+        xiold = xi.col(i - 1);
+        phiold = phi.col(i - 1);
+        theta1old = theta1.col(i - 1);
+        theta2old = theta2.col(i - 1);
+        qrcore(Y, W, Wt, Winv, Winvt, omega_fake, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
+        BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
+        gamma.col(i) = gammaold;
+        xi.col(i) = xiold;
+        phi.col(i) = phiold;
+        theta1.col(i) = theta1old;
+        theta2.col(i) = theta2old;
+        
+        /* If all elements of phi are zeros at some lambda, break out of the loop.*/
+        if (arma::sum(arma::abs(phi.col(i))) == 0) {
+          for (int j = i + 1; j < n_lambda; j++)
+            BIC_lambda.row(j) = BIC_lambda.row(i);
+          break;
+        }
+      }
+      uword index1;
+      // If .col(1), refer to BIC with log term
+      (BIC_lambda.col(0)).min(index1);
+      arma::mat weight_scad_deriv = scad_derivative(arma::abs(gamma.col(index1)), lambda[index1], scad_weight);
+      omega = omega_weight(weight_scad_deriv, p, L);
+      
+      /* main procedure */
+      for (int i = 1; i < n_lambda; i++) {
+        gammaold = gamma.col(i - 1);
+        xiold = xi.col(i - 1);
+        phiold = phi.col(i - 1);
+        theta1old = theta1.col(i - 1);
+        theta2old = theta2.col(i - 1);
+        qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
+        BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
+        gamma.col(i) = gammaold;
+        xi.col(i) = xiold;
+        phi.col(i) = phiold;
+        theta1.col(i) = theta1old;
+        theta2.col(i) = theta2old;
+        
+        /* If all elements of phi are zeros at some lambda, break out of the loop.*/
+        if (arma::sum(arma::abs(phi.col(i))) == 0) {
+          for (int j = i + 1; j < n_lambda; j++)
+            BIC_lambda.row(j) = BIC_lambda.row(i);
+          
+          Rcpp::Rcout << "All values of gamma are zeros when lambda > " << lambda[i] << "\n" << std::endl;
+          break;
+        }  
       }
     }
-    uword index1;
-    // If .col(1), refer to BIC with log term
-    (BIC_lambda.col(0)).min(index1);
-    arma::mat weight_scad_deriv = scad_derivative(abs(gamma.col(index1)), lambda[index1], scad_weight);
-    omega = omega_weight(weight_scad_deriv, p, L);
     
-    /* main procedure */
-    for(int i = 1; i < n_lambda; i++) {
-      gammaold = gamma.col(i - 1);
-      xiold = xi.col(i - 1);
-      phiold = phi.col(i - 1);
-      theta1old = theta1.col(i - 1);
-      theta2old = theta2.col(i - 1);
-      qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
-      BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
-      gamma.col(i) = gammaold;
-      xi.col(i) = xiold;
-      phi.col(i) = phiold;
-      theta1.col(i) = theta1old;
-      theta2.col(i) = theta2old;
-      
-      /* If all elements of phi are zeros at some lambda, break out the loop.*/
-      if(sum(abs(phi.col(i))) == 0) {
-        for(int j = i+1; j < n_lambda; j++)
-          BIC_lambda.row(j) = BIC_lambda.row(i);
-        
-        Rcpp::Rcout << "All values of gamma are zeros when lambda >" << lambda[i] << "\n" << std::endl;
-        break;
-      }  
-    }
-  }
-  
-  return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
-                            Rcpp::Named("xi") = xi, 
-                            Rcpp::Named("phi") = phi,
-                            Rcpp::Named("theta1") = theta1, 
-                            Rcpp::Named("theta2") = theta2,
-                            Rcpp::Named("BIC") = BIC_lambda,
-                            Rcpp::Named("omega") = omega);
-  
+    return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
+                              Rcpp::Named("xi") = xi, 
+                              Rcpp::Named("phi") = phi,
+                              Rcpp::Named("theta1") = theta1, 
+                              Rcpp::Named("theta2") = theta2,
+                              Rcpp::Named("BIC") = BIC_lambda,
+                              Rcpp::Named("omega") = omega);
 }

@@ -2,20 +2,20 @@
 % Please edit documentation in R/qrglasso.R
 \name{plot.qrglasso.predict}
 \alias{plot.qrglasso.predict}
-\title{Display the estimated coefficient functions}
+\title{Display Predicted Coefficient Functions from \code{qrglasso}}
 \usage{
 \method{plot}{qrglasso.predict}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{qrglasso.predict} for the \code{plot} method}
+\item{x}{An object of class \code{qrglasso.predict} for the \code{plot} method.}
 
-\item{...}{Not used directly}
+\item{...}{Additional parameters not used directly.}
 }
 \value{
 \code{NULL}
 }
 \description{
-Display the estimated coefficient functions by BIC
+Visualize the predicted coefficient functions selected by BIC.
 }
 \examples{
 set.seed(123)
@@ -25,8 +25,13 @@ L <- 5
 Y <- matrix(rnorm(n), n, 1)
 W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 
-result <- qrglasso(Y = Y, W = W, L = 5)
+# Call qrglasso with default parameters
+result <- qrglasso(Y = Y, W = W, p = p)
+
+# Predict the top-k coefficient functions
 estimate <- predict(result, top_k = 2)
+
+# Display the predicted coefficient functions
 plot(estimate)
 
 }

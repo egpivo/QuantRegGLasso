@@ -2,20 +2,20 @@
 % Please edit documentation in R/qrglasso.R
 \name{plot.qrglasso}
 \alias{plot.qrglasso}
-\title{Display the estimated coefficient functions}
+\title{Display BIC Results from \code{qrglasso}}
 \usage{
 \method{plot}{qrglasso}(x, ...)
 }
 \arguments{
-\item{x}{An object of class \code{qrglasso.predict} for the \code{plot} method}
+\item{x}{An object of class \code{qrglasso} for the \code{plot} method.}
 
-\item{...}{Not used directly}
+\item{...}{Additional parameters not used directly.}
 }
 \value{
 \code{NULL}
 }
 \description{
-Display the estimated coefficient functions by BIC
+Visualize the HDIC BIC results corresponding to hyperparameters obtained from \code{qrglasso}.
 }
 \examples{
 set.seed(123)
@@ -25,7 +25,10 @@ L <- 5
 Y <- matrix(rnorm(n), n, 1)
 W <- matrix(rnorm(n * p * (L - 1)), n, p * (L - 1))
 
-result <- qrglasso(Y = Y, W = W, L = 5)
+# Call qrglasso with default parameters
+result <- qrglasso(Y = Y, W = W, p = p)
+
+# Visualize the BIC results
 plot(result)
 
 }

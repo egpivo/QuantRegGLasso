@@ -1,6 +1,6 @@
 Package: QuantRegGLasso
-Title: Adaptively Weighted Group Lasso for Semiparametic Quantile Rgression Models
-Version: 0.5.0
+Title: Adaptively Weighted Group Lasso for Semiparametric Quantile Regression Models
+Version: 1.0.0
 Authors@R: c(person(
                 given = "Wen-Ting",
                 family = "Wang",
@@ -12,23 +12,29 @@ Authors@R: c(person(
                 given = "Wei-Ying",
                 family = "Wu",
                 email = "wuweiying1011@gmail.com",
-                role = "aut"
-                ),
+                role = c("aut")
+              ),
               person(
                 given = "Toshio",
                 family = "Honda",
-                email="t.honda@r.hit-u.ac.jp",
-                rol = c("aut")),
+                email = "t.honda@r.hit-u.ac.jp",
+                role = c("aut")
+              ),
               person(
                 given = "Ching-Kang",
                 family = "Ing",
                 email="cking@stat.nthu.edu.tw",
-                rol = c("aut"),
+                role = c("aut"),
                 comment = c(ORCID = "0000-0003-1362-8246")
               )
             )
-Description: Address adaptively weighted group Lasso procedures of quantile regression problems. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models, as well as additive quantile regression models featuring ultra-high dimensional covariates. (Toshio Honda, Ching-Kang Ing, Wei-Ying Wu, 2019,. <DOI: 10.3150/18-BEJ1091>).
-License: GPL-3
+Description: Implements an adaptively weighted group Lasso procedure for simultaneous variable selection and structure identification in varying
+  coefficient quantile regression models and additive quantile regression models with ultra-high dimensional covariates. The methodology, grounded
+  in a strong sparsity condition, establishes selection consistency under certain weight conditions. To address the challenge of tuning parameter 
+  selection in practice, a BIC-type criterion named high-dimensional information criterion (HDIC) is proposed. The Lasso procedure, guided by
+  HDIC-determined tuning parameters, maintains selection consistency. Theoretical findings are strongly supported by simulation studies.
+  (Toshio Honda, Ching-Kang Ing, Wei-Ying Wu, 2019, <DOI:10.3150/18-BEJ1091>).
+License: GPL (>= 2)
 LazyData: true
 ByteCompile: true
 BugReports: https://github.com/egpivo/QuantRegGLasso/issues
@@ -42,7 +48,6 @@ Suggests:
     rmarkdown,
     testthat (>= 2.1.0)
 SystemRequirements: GNU make
-VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
