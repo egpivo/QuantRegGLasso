@@ -1,3 +1,16 @@
+## QuantRegGLasso 1.0.0 (Release Date: 2024-01-17)
+### Overview 
+In this release, we have deployed the package to CRAN following its standard procedures. The main features of this release include:
+
+- `qrglasso`: This function allows for model quantile regression by adaptively weighted group Lasso.
+   - `predict`: Generate estimations.
+   - `plot.qrglasso`: Investigate BIC performance.
+   - `plot.qrglasso.predict`: Visualize estimations.
+
+- `orthogonize_bspline`: Orthogonalize B-splines using the built-in function `splines::bs`.
+---
+
+
 ## QuantRegGLasso 0.5.0 (Release Date: 2024-01-11)
 ### Overview 
 - Added a `plot.qrglasso` function for displaying BIC w.r.t. hyperparameters via `qrglasso` object.
