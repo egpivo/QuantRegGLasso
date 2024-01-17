@@ -12,11 +12,18 @@
 **QuantRegGLasso** is an R package designed for adaptively weighted group Lasso procedures in quantile regression. It excels in simultaneous variable selection and structure identification for varying coefficient quantile regression models and additive quantile regression models with ultra-high dimensional covariates.
 
 
-## Installation
-- Install the current development version from GitHub:
-  ```r
-  remotes::install_github("egpivo/QuantRegGLasso")
-  ```
+### Installation
+You can install **QuantRegGLasso** using either of the following methods:
+
+#### Install from CRAN
+```r
+install.packages("QuantRegGLasso")
+```
+
+#### Install the Development Version from GitHub
+```r
+remotes::install_github("egpivo/QuantRegGLasso")
+```
 
 **Please Note:**
 
