@@ -1,57 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/pull_request_template.html</loc>
-  </url>
-  <url>
-    <loc>/reference/awgl.html</loc>
-  </url>
-  <url>
-    <loc>/reference/awgl_omega.html</loc>
-  </url>
-  <url>
-    <loc>/reference/check_predict_parameters.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/orthogonize_bspline.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.qrglasso.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.qrglasso.predict.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_bic_result.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_coefficient_function.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_sequentially.html</loc>
-  </url>
-  <url>
-    <loc>/reference/predict.html</loc>
-  </url>
-  <url>
-    <loc>/reference/qrglasso.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/awgl.html</loc></url>
+<url><loc>/reference/awgl_omega.html</loc></url>
+<url><loc>/reference/check_predict_parameters.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/orthogonize_bspline.html</loc></url>
+<url><loc>/reference/plot.qrglasso.html</loc></url>
+<url><loc>/reference/plot.qrglasso.predict.html</loc></url>
+<url><loc>/reference/plot_bic_result.html</loc></url>
+<url><loc>/reference/plot_coefficient_function.html</loc></url>
+<url><loc>/reference/plot_sequentially.html</loc></url>
+<url><loc>/reference/predict.html</loc></url>
+<url><loc>/reference/qrglasso.html</loc></url>
 </urlset>
+
