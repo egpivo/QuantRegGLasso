@@ -55,3 +55,25 @@ This paper introduces the adaptively weighted group Lasso procedure and its appl
 
 ## License
 GPL (>= 2)
+
+
+## Citation
+- To cite package ‘QuantRegGLasso’ in publications use:
+```
+  Wang W, Wu W, Honda T, Ing C (2024). _QuantRegGLasso: Adaptively
+  Weighted Group Lasso for Semiparametric Quantile Regression Models_.
+  R package version 1.0.0,
+  <https://CRAN.R-project.org/package=QuantRegGLasso>.
+```
+
+- A BibTeX entry for LaTeX users is
+```
+  @Manual{,
+    title = {QuantRegGLasso: Adaptively Weighted Group Lasso for Semiparametric Quantile
+Regression Models},
+    author = {Wen-Ting Wang and Wei-Ying Wu and Toshio Honda and Ching-Kang Ing},
+    year = {2024},
+    note = {R package version 1.0.0},
+    url = {https://CRAN.R-project.org/package=QuantRegGLasso},
+  }
+```
