@@ -1,6 +1,8 @@
 // includes from the plugin
 // [[Rcpp::depends(RcppArmadillo)]]
 #include "RcppArmadillo.h"
+#include <cmath>
+#include <limits>
 using namespace arma;
 using namespace Rcpp;
 using namespace std;
@@ -33,6 +35,7 @@ arma::vec soft3(const arma::colvec v,
   arma::vec ans, zero;
   double temp;
   int p = (int) pL / L;
+  const double eps = std::numeric_limits<double>::epsilon();
   
   ans.zeros(pL);
   if(L > 1)
@@ -41,18 +44,30 @@ arma::vec soft3(const arma::colvec v,
   for(int j = 0; j < p; j++) {
     m = j * L;
     //constant
-    temp = 1 - lambda * omega(j, 0) / norm(v.row(m), 2);
-    if(temp > 0)
-      ans.row(m) =  temp * v.row(m);
-    else
+    double constant_norm = norm(v.row(m), 2);
+    if (constant_norm > eps) {
+      temp = 1 - lambda * omega(j, 0) / constant_norm;
+      if(temp > 0)
+        ans.row(m) =  temp * v.row(m);
+      else
+        ans.row(m) = 0;
+    }
+    else {
       ans.row(m) = 0;
+    }
     //nonconstant
     if(L > 1) {
-      temp = 1 - lambda * omega(j, 1) / norm(v.rows(m + 1, m + L - 1), 2);
-      if(temp > 0)
-        ans.rows(m + 1, m + L - 1) = temp * v.rows(m + 1, m + L - 1);
-      else
+      double varying_norm = norm(v.rows(m + 1, m + L - 1), 2);
+      if (varying_norm > eps) {
+        temp = 1 - lambda * omega(j, 1) / varying_norm;
+        if(temp > 0)
+          ans.rows(m + 1, m + L - 1) = temp * v.rows(m + 1, m + L - 1);
+        else
+          ans.rows(m + 1, m + L - 1) = zero;
+      }
+      else {
         ans.rows(m + 1, m + L - 1) = zero;
+      }
     }
   }
   
@@ -148,13 +163,17 @@ void qrcore(const arma::mat Y,
             double zeta,
             const double zetaincre,
             const int maxit,
-            const double tol) {
+            const double tol,
+            int &iterations,
+            double &final_error) {
   int n = Y.n_rows;
   int p = omega.n_rows;
   int pL = W.n_cols;
   int L = (int) pL / p;
   int iter = 0;
   arma::vec er(3);
+  double current_error = std::numeric_limits<double>::infinity();
+  bool converged = false;
   
   arma::mat gammaold = gamma;
   arma::mat xiold = xi;
@@ -171,13 +190,16 @@ void qrcore(const arma::mat Y,
     temp2 = gamma - phi;
     theta1 = theta1old + zeta*(temp1);
     theta2 = theta2old + zeta*(temp2);
-    
+
     er[0] = arma::norm(temp1, "fro") / sqrt(n / 1.0);
     er[1] = arma::norm(temp2, "fro") / sqrt(pL / 1.0);
     er[2] = arma::norm(gamma - gammaold, "fro") / sqrt(pL / 1.0);
-    
-    if(max(er) <= tol)
+    current_error = max(er);
+
+    if(current_error <= tol) {
+      converged = true;
       break;
+    }
     gammaold = gamma;
     xiold = xi;
     phiold = phi;
@@ -185,10 +207,15 @@ void qrcore(const arma::mat Y,
     theta2old = theta2;
     zeta *= zetaincre;
   }
-  
-  iter++;
-  if(iter == maxit)
-    Rcpp::Rcout << "Not converge at lambda=" << lambda << "\n" << std::endl;
+
+  if(!converged) {
+    if(iter == maxit)
+      Rcpp::Rcout << "Not converge at lambda=" << lambda << "\n" << std::endl;
+  }
+  iterations = iter + (converged ? 1 : 0);
+  if (!converged && iter == maxit)
+    iterations = maxit;
+  final_error = current_error;
 }
 
 void qrinit(const arma::mat Y,
@@ -209,11 +236,30 @@ void qrinit(const arma::mat Y,
   arma::vec er(2);
   Wt = arma::trans(W);
   IpL.eye(pL, pL);
-  if(pL < n)
-    Winv_initial = arma::inv_sympd(Wt * W) * Wt;
-  else
-    Winv_initial = arma::inv_sympd(Wt * W + log(pL) / (n * 1.0) * IpL) * Wt;
-  
+  arma::mat gram = Wt * W;
+  arma::mat inv_gram;
+  bool success = false;
+  const double ridge = 1e-8;
+  if(pL < n) {
+    success = arma::inv_sympd(inv_gram, gram);
+    if(!success) {
+      success = arma::inv_sympd(inv_gram, gram + ridge * IpL);
+    }
+    if(success)
+      Winv_initial = inv_gram * Wt;
+  }
+  if(!success) {
+    arma::mat regularized = gram + (std::log(pL + 1.0) / (n + 0.0)) * IpL + ridge * IpL;
+    success = arma::inv_sympd(inv_gram, regularized);
+    if(success)
+      Winv_initial = inv_gram * Wt;
+  }
+  if(!success) {
+    success = arma::pinv(Winv_initial, W);
+    if(!success)
+      Rcpp::stop("Failed to compute pseudo-inverse during initialization");
+  }
+
   gammaold = Winv_initial * Y;
   xiold.zeros(n, 1);
   arma::mat theta1old = theta1;
@@ -285,14 +331,18 @@ void qrinit(const arma::mat Y,
    arma::mat phi;
    arma::mat theta1;
    arma::mat theta2;
-   arma::mat Winv, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
-   gamma.zeros(pL, n_lambda);
-   xi.zeros(n, n_lambda);
-   phi.zeros(pL, n_lambda);
-   theta1.zeros(n , n_lambda);
-   theta2.zeros(pL, n_lambda);
-   IpL.eye(pL, pL);
-   BIC_lambda.zeros(n_lambda, 2);
+  arma::mat Winv, Wt, Winvt, gammaold, xiold, phiold, theta1old, theta2old, IpL, BIC_lambda;
+  gamma.zeros(pL, n_lambda);
+  xi.zeros(n, n_lambda);
+  phi.zeros(pL, n_lambda);
+  theta1.zeros(n , n_lambda);
+  theta2.zeros(pL, n_lambda);
+  IpL.eye(pL, pL);
+  BIC_lambda.zeros(n_lambda, 2);
+  arma::vec solver_iterations(n_lambda);
+  arma::vec solver_max_error(n_lambda);
+  solver_iterations.fill(arma::datum::nan);
+  solver_max_error.fill(arma::datum::nan);
    
    /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the corresponding BIC*/
    gammaold = gamma.col(0);
@@ -316,37 +366,48 @@ void qrinit(const arma::mat Y,
        Winv = arma::inv_sympd(Wt * W + (1 + (log(pL) / (n + 0.0))) * IpL);
      
      Winvt = Winv * Wt;
-     for (int i = 1; i < n_lambda; i++) {
-       gammaold = gamma.col(i - 1);
-       xiold = xi.col(i - 1);
-       phiold = phi.col(i - 1);
-       theta1old = theta1.col(i - 1);
-       theta2old = theta2.col(i - 1);
-       qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
-       BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
-       gamma.col(i) = gammaold;
-       xi.col(i) = xiold;
-       phi.col(i) = phiold;
-       theta1.col(i) = theta1old;
-       theta2.col(i) = theta2old;
-       
-       /* If all elements of phi are zeros at some lambda, break out the loop.*/
-       if (arma::sum(arma::abs(phi.col(i))) == 0) {
-         for (int j = i + 1; j < n_lambda; j++)
-           BIC_lambda.row(j) = BIC_lambda.row(i);
-         Rcpp::Rcout << "All values of gamma are zeros when lambda > " << lambda[i] << "\n" << std::endl;
-         break;
-       }  
-     }
-   }
-   
-   return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
-                             Rcpp::Named("xi") = xi, 
-                             Rcpp::Named("phi") = phi,
-                             Rcpp::Named("theta1") = theta1, 
-                             Rcpp::Named("theta2") = theta2,
-                             Rcpp::Named("BIC") = BIC_lambda);
- }
+    for (int i = 1; i < n_lambda; i++) {
+      gammaold = gamma.col(i - 1);
+      xiold = xi.col(i - 1);
+      phiold = phi.col(i - 1);
+      theta1old = theta1.col(i - 1);
+      theta2old = theta2.col(i - 1);
+      int iter_count = 0;
+      double max_error = std::numeric_limits<double>::quiet_NaN();
+      qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol, iter_count, max_error);
+      BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
+      gamma.col(i) = gammaold;
+      xi.col(i) = xiold;
+      phi.col(i) = phiold;
+      theta1.col(i) = theta1old;
+      theta2.col(i) = theta2old;
+      solver_iterations[i] = iter_count;
+      solver_max_error[i] = max_error;
+
+      /* If all elements of phi are zeros at some lambda, break out the loop.*/
+      if (arma::sum(arma::abs(phi.col(i))) == 0) {
+        for (int j = i + 1; j < n_lambda; j++)
+          BIC_lambda.row(j) = BIC_lambda.row(i);
+        for (int j = i + 1; j < n_lambda; j++) {
+          solver_iterations[j] = arma::datum::nan;
+          solver_max_error[j] = arma::datum::nan;
+        }
+        Rcpp::Rcout << "All values of gamma are zeros when lambda > " << lambda[i] << "\n" << std::endl;
+        break;
+      }  
+    }
+  }
+
+  return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
+                            Rcpp::Named("xi") = xi, 
+                            Rcpp::Named("phi") = phi,
+                            Rcpp::Named("theta1") = theta1, 
+                            Rcpp::Named("theta2") = theta2,
+                            Rcpp::Named("BIC") = BIC_lambda,
+                            Rcpp::Named("solver_iterations") = solver_iterations,
+                            Rcpp::Named("solver_max_error") = solver_max_error,
+                            Rcpp::Named("omega") = omega);
+}
 
 //' @title Internal function: Quantile Regression with Adaptively Group Lasso without `Omega`
 //' @keywords internal
@@ -398,8 +459,14 @@ Rcpp::List awgl(const arma::mat Y,
     theta2.zeros(pL, n_lambda);
     IpL.eye(pL, pL);
     BIC_lambda.zeros(n_lambda, 2);
-    omega_fake.ones(pL, 1);
-    omega.zeros(p, 1);
+    omega_fake.ones(p, 2);
+    if (L == 1)
+      omega_fake.col(1).zeros();
+    omega.zeros(p, 2);
+    arma::vec solver_iterations(n_lambda);
+    arma::vec solver_max_error(n_lambda);
+    solver_iterations.fill(arma::datum::nan);
+    solver_max_error.fill(arma::datum::nan);
     
     /* compute the gamma, xi, theta1 w.r.t lambda = 0, and compute the correponding BIC*/
     gammaold = gamma.col(0);
@@ -431,24 +498,32 @@ Rcpp::List awgl(const arma::mat Y,
         phiold = phi.col(i - 1);
         theta1old = theta1.col(i - 1);
         theta2old = theta2.col(i - 1);
-        qrcore(Y, W, Wt, Winv, Winvt, omega_fake, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
+        int iter_count = 0;
+        double max_error = std::numeric_limits<double>::quiet_NaN();
+        qrcore(Y, W, Wt, Winv, Winvt, omega_fake, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol, iter_count, max_error);
         BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
         gamma.col(i) = gammaold;
         xi.col(i) = xiold;
         phi.col(i) = phiold;
         theta1.col(i) = theta1old;
         theta2.col(i) = theta2old;
-        
+        solver_iterations[i] = iter_count;
+        solver_max_error[i] = max_error;
+
         /* If all elements of phi are zeros at some lambda, break out of the loop.*/
         if (arma::sum(arma::abs(phi.col(i))) == 0) {
           for (int j = i + 1; j < n_lambda; j++)
             BIC_lambda.row(j) = BIC_lambda.row(i);
+          for (int j = i + 1; j < n_lambda; j++) {
+            solver_iterations[j] = arma::datum::nan;
+            solver_max_error[j] = arma::datum::nan;
+          }
           break;
         }
       }
       uword index1;
       // If .col(1), refer to BIC with log term
-      (BIC_lambda.col(0)).min(index1);
+      index1 = BIC_lambda.col(0).index_min();
       arma::mat weight_scad_deriv = scad_derivative(arma::abs(gamma.col(index1)), lambda[index1], scad_weight);
       omega = omega_weight(weight_scad_deriv, p, L);
       
@@ -459,30 +534,40 @@ Rcpp::List awgl(const arma::mat Y,
         phiold = phi.col(i - 1);
         theta1old = theta1.col(i - 1);
         theta2old = theta2.col(i - 1);
-        qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol);
+        int iter_count = 0;
+        double max_error = std::numeric_limits<double>::quiet_NaN();
+        qrcore(Y, W, Wt, Winv, Winvt, omega, gammaold, xiold, phiold, theta1old, theta2old, lambda[i], tau, zeta, zetaincre, maxit, tol, iter_count, max_error);
         BIC_lambda.row(i) = BIC(xiold, phiold, tau, L, qn);
         gamma.col(i) = gammaold;
         xi.col(i) = xiold;
         phi.col(i) = phiold;
         theta1.col(i) = theta1old;
         theta2.col(i) = theta2old;
-        
+        solver_iterations[i] = iter_count;
+        solver_max_error[i] = max_error;
+
         /* If all elements of phi are zeros at some lambda, break out of the loop.*/
         if (arma::sum(arma::abs(phi.col(i))) == 0) {
           for (int j = i + 1; j < n_lambda; j++)
             BIC_lambda.row(j) = BIC_lambda.row(i);
-          
+
           Rcpp::Rcout << "All values of gamma are zeros when lambda > " << lambda[i] << "\n" << std::endl;
+          for (int j = i + 1; j < n_lambda; j++) {
+            solver_iterations[j] = arma::datum::nan;
+            solver_max_error[j] = arma::datum::nan;
+          }
           break;
         }  
       }
     }
-    
+
     return Rcpp::List::create(Rcpp::Named("gamma") = gamma,
                               Rcpp::Named("xi") = xi, 
                               Rcpp::Named("phi") = phi,
                               Rcpp::Named("theta1") = theta1, 
                               Rcpp::Named("theta2") = theta2,
                               Rcpp::Named("BIC") = BIC_lambda,
-                              Rcpp::Named("omega") = omega);
+                              Rcpp::Named("omega") = omega,
+                              Rcpp::Named("solver_iterations") = solver_iterations,
+                              Rcpp::Named("solver_max_error") = solver_max_error);
 }

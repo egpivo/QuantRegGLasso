@@ -83,14 +83,41 @@ qrglasso <- function(Y,
                      lambda = NULL,
                      maxit = 1000,
                      thr = 1e-04) {
+  if (!is.matrix(W)) {
+    W <- as.matrix(W)
+  }
+  if (ncol(W) %% p != 0) {
+    stop("Number of columns in W must be divisible by p", call. = FALSE)
+  }
   if (is.null(lambda)) {
     n_lambda <- 51
     max_lambda <- 10
     lambda <- c(0, exp(seq(log(max_lambda / 1e4), log(max_lambda), length = (n_lambda - 1))))
   }
+  if (is.unsorted(lambda, na.rm = TRUE, strictly = FALSE)) {
+    warning("lambda sequence is not non-decreasing; sorting in ascending order.", call. = FALSE)
+    lambda <- sort(lambda)
+  }
   zeta <- 10
   zetaincre <- 1
   L_star <- dim(W)[2] / p
+  
+  if (!is.null(omega)) {
+    if (!is.matrix(omega)) {
+      omega <- as.matrix(omega)
+    }
+    if (nrow(omega) != p) {
+      stop("omega must have p rows", call. = FALSE)
+    }
+    if (ncol(omega) < 2) {
+      if (L_star > 1) {
+        stop("omega must have at least two columns when L > 1", call. = FALSE)
+      }
+      omega <- cbind(omega, 0)
+    } else if (ncol(omega) > 2) {
+      omega <- omega[, 1:2, drop = FALSE]
+    }
+  }
   
   if (is.null(omega))
     result <- awgl(Y, W, lambda, tau, L_star, qn, zeta, zetaincre, maxit, thr)
@@ -106,7 +133,9 @@ qrglasso <- function(Y,
     BIC = result$BIC,
     lambda = lambda,
     L = L_star + 1,
-    omega = result$omega
+    omega = result$omega,
+    solver_iterations = result$solver_iterations,
+    solver_max_error = result$solver_max_error
   )
   
   class(obj.cv) <- "qrglasso"

@@ -148,7 +148,7 @@ test_that("plot_coefficient_function returns a ggplot object", {
   plot_result <- plot_coefficient_function(data, variate)
   
   # Verify the output
-  expect_true(is.ggplot(plot_result))
+  expect_true(ggplot2::is_ggplot(plot_result))
 })
 
 # Test plot_coefficient_function
@@ -161,5 +161,5 @@ test_that("plot_bic_result returns a ggplot object", {
   plot_result <- plot_bic_result(data, variate)
   
   # Verify the output
-  expect_true(is.ggplot(plot_result))
+  expect_true(ggplot2::is_ggplot(plot_result))
 })
