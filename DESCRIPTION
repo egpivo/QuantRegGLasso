@@ -1,6 +1,6 @@
 Package: QuantRegGLasso
 Title: Adaptively Weighted Group Lasso for Semiparametric Quantile Regression Models
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(person(
                 given = "Wen-Ting",
                 family = "Wang",
@@ -51,5 +51,5 @@ SystemRequirements: GNU make
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/egpivo/SpatPCA
+URL: https://github.com/egpivo/QuantRegGLasso
 Config/testthat/edition: 3

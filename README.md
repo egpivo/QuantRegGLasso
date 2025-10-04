@@ -1,6 +1,5 @@
 ## QuantRegGLasso: Adaptively Weighted Group Lasso for Semiparametric Quantile Regression Models
 
-[![License](https://eddelbuettel.github.io/badges/GPL2+.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 [![R build status](https://github.com/egpivo/QuantRegGLasso/workflows/R-CMD-check/badge.svg)](https://github.com/egpivo/QuantRegGLasso/actions)
 [![Code Coverage](https://img.shields.io/codecov/c/github/egpivo/QuantRegGLasso/master.svg)](https://app.codecov.io/github/egpivo/QuantRegGLasso?branch=master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/QuantRegGLasso?color=green)](https://cran.r-project.org/package=QuantRegGLasso)
@@ -60,9 +59,9 @@ GPL (>= 2)
 ## Citation
 - To cite package ‘QuantRegGLasso’ in publications use:
 ```
-  Wang W, Wu W, Honda T, Ing C (2024). _QuantRegGLasso: Adaptively
+  Wang W, Wu W, Honda T, Ing C (2025). _QuantRegGLasso: Adaptively
   Weighted Group Lasso for Semiparametric Quantile Regression Models_.
-  R package version 1.0.0,
+  R package version 1.0.1,
   <https://CRAN.R-project.org/package=QuantRegGLasso>.
 ```
 
@@ -72,8 +71,8 @@ GPL (>= 2)
     title = {QuantRegGLasso: Adaptively Weighted Group Lasso for Semiparametric Quantile
 Regression Models},
     author = {Wen-Ting Wang and Wei-Ying Wu and Toshio Honda and Ching-Kang Ing},
-    year = {2024},
-    note = {R package version 1.0.0},
+    year = {2025},
+    note = {R package version 1.0.1},
     url = {https://CRAN.R-project.org/package=QuantRegGLasso},
   }
 ```
